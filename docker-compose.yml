@@ -1,0 +1,25 @@
+version: '3'
+services:
+  logger:
+    image: fluent/fluent-bit:1.4 
+    container_name: fluent-bit
+    ports:
+      - "24224:24224"
+      - "24224:24224/udp"
+    env_file:
+      - .env
+    volumes:
+      - ./fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf
+  expense_tracker:
+    build: .
+    image: expense_tracker
+    container_name: expense_tracker
+    restart: unless-stopped
+    ports:
+      - "4000:4000"
+    env_file:
+      - .env
+    depends_on:
+      - logger
+    logging:
+      driver: fluentd
