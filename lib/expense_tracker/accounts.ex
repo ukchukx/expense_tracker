@@ -63,7 +63,7 @@ defmodule ExpenseTracker.Accounts do
     end
   end
 
-  def user_by_id(id) when is_binary(id), do: User |> ById.one(id) |> Queries.fetch_one
+  def user_by_id(id), do: User |> ById.one(id) |> Queries.fetch_one
 
   def user_by_email(email) do
     email

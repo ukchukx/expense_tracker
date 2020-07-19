@@ -13,6 +13,11 @@ defmodule ExpenseTracker.BudgetTest do
       assert {:ok, _} = Budgets.budget_by_id(budget_id)
     end
 
+    test "can be listed for a user" do
+      assert {:ok, %Budget{user_id: user_id}} = fixture(:budget)
+      assert [%{}] = Budgets.budgets_for_user(user_id)
+    end
+
     test "can be deleted" do
       assert {:ok, %Budget{id: budget_id} = budget} = fixture(:budget)
       assert :ok = Budgets.delete_budget(budget)

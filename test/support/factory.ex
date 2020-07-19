@@ -1,6 +1,6 @@
 defmodule ExpenseTracker.Factory do
-  alias ExpenseTracker.Commands.{CreateUser, CreateBudget}
-  alias ExpenseTracker.Aggregates.{Budget, User}
+  alias ExpenseTracker.Commands.{CreateUser, CreateExpenseItem, CreateBudget}
+  alias ExpenseTracker.Aggregates.{Budget, ExpenseItem, User}
   alias ExpenseTracker.Support.Utils
 
   use ExMachina
@@ -24,9 +24,18 @@ defmodule ExpenseTracker.Factory do
       start_date: start_date,
       end_date: Faker.Date.forward(30),
       line_items: [
-        %{amount: 10, description: Faker.Lorem.word()},
-        %{amount: 20, description: Faker.Lorem.word()}
+        %{amount: 10_000, description: Faker.Lorem.word()},
+        %{amount: 20_000, description: Faker.Lorem.word()}
       ]
+    }
+  end
+
+  def expense_item_factory do
+    %{
+      budget_id: Ecto.UUID.generate(),
+      expense_item_id: Ecto.UUID.generate(),
+      description: Faker.Lorem.sentence(1..2),
+      amount: 10_000
     }
   end
 
@@ -60,4 +69,20 @@ defmodule ExpenseTracker.Factory do
   end
 
   def build_budget_params(attrs \\ []), do: build(:budget, attrs)
+
+
+  def create_expense_item_command_factory(attrs \\ []), do: struct(CreateExpenseItem, build_expense_item_params(attrs))
+
+  def expense_item_aggregate_factory(attrs \\ []) do
+    params =
+      :create_expense_item_command
+      |> build(attrs)
+      |> Utils.to_map
+      |> Map.drop([:expense_item_id])
+      |> Map.put(:id, Ecto.UUID.generate())
+
+    struct(ExpenseItem, params)
+  end
+
+  def build_expense_item_params(attrs \\ []), do: build(:expense_item, attrs)
 end

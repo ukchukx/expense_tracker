@@ -50,6 +50,8 @@ config :expense_tracker, ExpenseTracker.Repo,
   truncate_read_tables_query: """
     TRUNCATE TABLE
       users,
+      budgets,
+      expense_items,
       projection_versions
     RESTART IDENTITY;
     """,

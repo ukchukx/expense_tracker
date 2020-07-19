@@ -7,10 +7,16 @@ defmodule ExpenseTracker.Fixture do
 
   def fixture(:budget, attrs), do: create_budget(attrs)
 
+  def fixture(:expense_item, attrs), do: create_expense_item(attrs)
+
   defp create_user(attrs \\ []), do: attrs |> ExpenseTracker.Factory.build_user_params |> Accounts.create_user
 
   defp create_budget(attrs \\ []) do
     attrs |> ExpenseTracker.Factory.build_budget_params |> Budgets.create_budget(user_context())
+  end
+
+  defp create_expense_item(attrs \\ []) do
+    attrs |> ExpenseTracker.Factory.build_expense_item_params |> Budgets.create_expense_item(budget_context())
   end
 
   def user_context do
@@ -20,4 +26,12 @@ defmodule ExpenseTracker.Fixture do
   end
 
   def user_context(%{} = user), do: %{user: user}
+
+  def budget_context do
+    {:ok, budget}  = create_budget()
+
+    budget_context(budget)
+  end
+
+  def budget_context(%{} = budget), do: %{budget: budget}
 end
