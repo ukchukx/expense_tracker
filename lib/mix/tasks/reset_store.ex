@@ -29,7 +29,7 @@ defmodule Mix.Tasks.ResetStore do
   end
 
   defp reset_read_store do
-    :stash
+    :expense_tracker
     |> Application.get_env(Repo)
     |> Postgrex.start_link
     |> elem(1)
@@ -37,7 +37,7 @@ defmodule Mix.Tasks.ResetStore do
   end
 
   defp truncate_read_tables_query do
-    Application.get_env(:stash, Repo)[:truncate_read_tables_query]
+    Application.get_env(:expense_tracker, Repo)[:truncate_read_tables_query]
   end
 
   defp reset_subscription_table do

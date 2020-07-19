@@ -7,7 +7,7 @@ defmodule ExpenseTracker.CommandedSupervisor do
 
   def init(_arg) do
     Supervisor.init([
-      # Projectors.User,
+      Projectors.User,
       # Projectors.Book,
       # Projectors.Movie,
       EventHandlers.Telemetry
