@@ -8,8 +8,7 @@ defmodule ExpenseTracker.CommandedSupervisor do
   def init(_arg) do
     Supervisor.init([
       Projectors.User,
-      # Projectors.Book,
-      # Projectors.Movie,
+      Projectors.Budget,
       EventHandlers.Telemetry
     ], strategy: :one_for_one)
   end

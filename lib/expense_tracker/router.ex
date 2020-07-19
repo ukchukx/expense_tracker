@@ -1,11 +1,13 @@
 defmodule ExpenseTracker.Router do
   alias ExpenseTracker.Middleware.{Telemetry, Uniqueness, Validate}
-  alias ExpenseTracker.Aggregates.User
+  alias ExpenseTracker.Aggregates.{Budget, User}
   alias ExpenseTracker.Commands.{
     CreateUser,
     DisableUser,
     EnableUser,
-    UpdateUser
+    UpdateUser,
+    CreateBudget,
+    DeleteBudget
   }
 
   use Commanded.Commands.Router
@@ -15,6 +17,7 @@ defmodule ExpenseTracker.Router do
   middleware Uniqueness
 
   identify User, by: :user_id,   prefix: "user-"
+  identify Budget, by: :budget_id,   prefix: "budget-"
 
   dispatch [
     CreateUser,
@@ -22,4 +25,9 @@ defmodule ExpenseTracker.Router do
     EnableUser,
     UpdateUser
   ], to: User, lifespan: User, timeout: Application.get_env(:expense_tracker, :router)[:timeout]
+
+  dispatch [
+    CreateBudget,
+    DeleteBudget
+  ], to: Budget, lifespan: Budget, timeout: Application.get_env(:expense_tracker, :router)[:timeout]
 end
