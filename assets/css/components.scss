@@ -1,0 +1,17 @@
+.orange-header {
+  @apply text-orange-500 text-5xl font-bold text-center;
+}
+
+.btn {
+  @apply font-bold py-2 px-4 rounded;
+}
+.btn-blue {
+  @apply bg-blue-500 text-white;
+  
+  &:hover {
+    @apply bg-blue-700;
+  }
+}
+.btn-white {
+  @apply bg-transparent text-blue-700 border border-blue-500;
+}

@@ -7,6 +7,7 @@ defmodule ExpenseTracker.Web.Router do
     plug :fetch_flash
     plug :protect_from_forgery
     plug :put_secure_browser_headers
+    plug ExpenseTracker.Web.Plugs.LoadCurrentUser
   end
 
   pipeline :api do
@@ -17,6 +18,14 @@ defmodule ExpenseTracker.Web.Router do
     pipe_through :browser
 
     get "/", PageController, :index
+
+    get "/signup", SessionController, :signup
+    post "/signup", SessionController, :create_account
+    get "/signin", SessionController, :signin
+    post "/signin", SessionController, :create_session
+    get "/signout", SessionController, :delete_session
+
+    get "/*path", PageController, :catch_all
   end
 
   # Other scopes may use custom stacks.

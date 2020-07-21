@@ -1,0 +1,4 @@
+deps/
+assets/node_modules
+assets/webpack.mix.js
+assets/tailwind.config.js
