@@ -19,6 +19,7 @@ defmodule ExpenseTracker.Web.Router do
     pipe_through [:browser, :auth]
 
     get "/", PageController, :index
+    get "/account", PageController, :account
 
     get "/signup", SessionController, :signup
     post "/signup", SessionController, :create_account

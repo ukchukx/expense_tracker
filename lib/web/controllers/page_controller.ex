@@ -44,5 +44,9 @@ defmodule ExpenseTracker.Web.PageController do
     # end
   end
 
+  def account(%{assigns: %{current_user: %{"id" => user_id} = user}} = conn, _) do
+    render conn, "account.html", user: user, page_title: "Account"
+  end
+
   def catch_all(conn, _), do: redirect(conn, to: Routes.page_path(conn, :index))
 end
