@@ -1,5 +1,5 @@
 defmodule ExpenseTracker.Aggregates.ExpenseItem do
-  defstruct [:id, :budget_id, :description, :amount, deleted: false]
+  defstruct [:id, :budget_id, :line_item_id, :description, :amount, deleted: false]
 
   alias ExpenseTracker.Commands.{CreateExpenseItem, DeleteExpenseItem}
   alias ExpenseTracker.Events.{ExpenseItemCreated, ExpenseItemDeleted}
@@ -18,6 +18,7 @@ defmodule ExpenseTracker.Aggregates.ExpenseItem do
     %ExpenseItemCreated{
       expense_item_id: c.expense_item_id,
       budget_id: c.budget_id,
+      line_item_id: c.line_item_id,
       description: c.description,
       amount: c.amount
     }
@@ -30,6 +31,7 @@ defmodule ExpenseTracker.Aggregates.ExpenseItem do
     %__MODULE__{expense_item |
       id: e.expense_item_id,
       budget_id: e.budget_id,
+      line_item_id: e.line_item_id,
       description: e.description,
       amount: e.amount
     }

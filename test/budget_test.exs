@@ -1,6 +1,7 @@
 defmodule ExpenseTracker.BudgetTest do
   alias ExpenseTracker.{Budgets, DataCase}
   alias ExpenseTracker.Projections.Budget
+  alias ExpenseTracker.Validators.Uuid
 
   use DataCase
 
@@ -11,6 +12,11 @@ defmodule ExpenseTracker.BudgetTest do
     test "can be created" do
       assert {:ok, %Budget{id: budget_id}} = fixture(:budget)
       assert {:ok, _} = Budgets.budget_by_id(budget_id)
+    end
+
+    test "contains line items that each have ids" do
+      assert {:ok, %Budget{line_items: line_items}} = fixture(:budget)
+      assert Enum.all?(line_items, &(Uuid.validate(&1["id"]) == :ok))
     end
 
     test "can be listed for a user" do

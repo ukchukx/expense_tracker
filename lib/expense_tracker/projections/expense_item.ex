@@ -7,6 +7,7 @@ defmodule ExpenseTracker.Projections.ExpenseItem do
     :id,
     :user_id,
     :budget_id,
+    :line_item_id,
     :description,
     :amount,
     :inserted_at,
@@ -18,6 +19,7 @@ defmodule ExpenseTracker.Projections.ExpenseItem do
   schema "expense_items" do
     field :user_id, :binary_id
     field :budget_id, :binary_id
+    field :line_item_id, :binary_id
     field :description, :string
     field :amount, :integer
 

@@ -16,7 +16,7 @@ defmodule ExpenseTracker.Fixture do
   end
 
   defp create_expense_item(attrs \\ []) do
-    attrs |> ExpenseTracker.Factory.build_expense_item_params |> Budgets.create_expense_item(budget_context())
+    attrs |> ExpenseTracker.Factory.build_expense_item_params |> Budgets.create_expense_item(line_item_context())
   end
 
   def user_context do
@@ -34,4 +34,10 @@ defmodule ExpenseTracker.Fixture do
   end
 
   def budget_context(%{} = budget), do: %{budget: budget}
+
+  def line_item_context do
+    context = %{budget: %{line_items: [%{"id" => id} | _]}} = budget_context()
+
+    Map.put(context, :line_item, %{id: id})
+  end
 end

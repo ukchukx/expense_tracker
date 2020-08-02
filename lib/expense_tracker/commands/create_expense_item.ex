@@ -1,5 +1,5 @@
 defmodule ExpenseTracker.Commands.CreateExpenseItem do
-  defstruct [:expense_item_id, :budget_id, :description, :amount]
+  defstruct [:expense_item_id, :budget_id, :line_item_id, :description, :amount]
 
   def assign_id(%__MODULE__{} = command, id), do: %__MODULE__{command | expense_item_id: id}
 
@@ -12,6 +12,7 @@ defimpl ExpenseTracker.Protocol.ValidCommand, for: ExpenseTracker.Commands.Creat
     expense_item_id
     |> validate_expense_item_id
     |> Kernel.++(validate_budget_id(budget_id))
+    |> Kernel.++(validate_line_item_id(command.line_item_id))
     |> Kernel.++(validate_amount(command.amount))
     |> Kernel.++(validate_description(command.description))
     |> case do
@@ -31,6 +32,13 @@ defimpl ExpenseTracker.Protocol.ValidCommand, for: ExpenseTracker.Commands.Creat
     case Uuid.validate(budget_id) do
       :ok           -> []
       {:error, err} -> [{:budget_id, err}]
+    end
+  end
+
+  defp validate_line_item_id(line_item_id) do
+    case Uuid.validate(line_item_id) do
+      :ok           -> []
+      {:error, err} -> [{:line_item_id, err}]
     end
   end
 

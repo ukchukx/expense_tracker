@@ -24,8 +24,8 @@ defmodule ExpenseTracker.Factory do
       start_date: start_date,
       end_date: Faker.Date.forward(30),
       line_items: [
-        %{amount: 10_000, description: Faker.Lorem.word()},
-        %{amount: 20_000, description: Faker.Lorem.word()}
+        %{amount: 10_000, description: Faker.Lorem.word(), id: Ecto.UUID.generate()},
+        %{amount: 20_000, description: Faker.Lorem.word(), id: Ecto.UUID.generate()}
       ]
     }
   end
@@ -34,6 +34,7 @@ defmodule ExpenseTracker.Factory do
     %{
       budget_id: Ecto.UUID.generate(),
       expense_item_id: Ecto.UUID.generate(),
+      line_item_id: Ecto.UUID.generate(),
       description: Faker.Lorem.sentence(1..2),
       amount: 10_000
     }
