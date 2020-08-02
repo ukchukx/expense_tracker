@@ -45,12 +45,12 @@
           <button 
             :disabled="hasErrors"
             @click="submitForm"
-            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" 
+            class="bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" 
             type="button">
             Sign Up
           </button>
         </div>
-        <a class="inline-block align-baseline font-bold text-sm text-blue-500" href="/signin">
+        <a class="inline-block align-baseline font-bold text-sm text-teal-500" href="/signin">
           Have an account? Sign In
         </a>
       </form>
