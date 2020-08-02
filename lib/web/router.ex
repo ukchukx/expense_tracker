@@ -7,15 +7,16 @@ defmodule ExpenseTracker.Web.Router do
     plug :fetch_flash
     plug :protect_from_forgery
     plug :put_secure_browser_headers
-    plug ExpenseTracker.Web.Plugs.LoadCurrentUser
   end
 
   pipeline :api do
     plug :accepts, ["json"]
   end
 
+  pipeline :auth, do: plug ExpenseTracker.Web.Plugs.LoadCurrentUser
+
   scope "/", ExpenseTracker.Web do
-    pipe_through :browser
+    pipe_through [:browser, :auth]
 
     get "/", PageController, :index
 
@@ -29,9 +30,11 @@ defmodule ExpenseTracker.Web.Router do
   end
 
   # Other scopes may use custom stacks.
-  # scope "/api", ExpenseTracker.Web do
-  #   pipe_through :api
-  # end
+  scope "/api", ExpenseTracker.Web do
+    pipe_through [:api, :fetch_session, :auth]
+
+    post "/budgets", PageController, :create_budget
+  end
 
   # Enables LiveDashboard only for development
   #

@@ -47,6 +47,7 @@ defmodule ExpenseTracker.MixProject do
       {:faker, "~> 0.13", only: :test},
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
+      {:observer_cli, "~> 1.5"},
       {:phoenix, "~> 1.5.0"},
       {:phoenix_ecto, "~> 4.1"},
       {:phoenix_html, "~> 2.11"},

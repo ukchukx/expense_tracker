@@ -1,12 +1,12 @@
 <template>
   <!-- eslint-disable -->
-  <div class="bg-blue-600">
+  <div class="bg-teal-500">
     <div class="container mx-auto px-4">
       <div class="flex items-center md:justify-between py-4">
         <div class="w-1/4 md:hidden">
         </div>
         <div class="w-1/2 md:w-auto text-center text-white text-2xl font-medium">
-          stash
+          expense tracker
         </div>
         <div class="w-1/4 md:w-auto md:flex text-right">
           <div>

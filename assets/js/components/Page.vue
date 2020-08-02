@@ -1,7 +1,7 @@
 <template>
   <!-- eslint-disable -->
   <div class="font-sans bg-gray-lighter flex flex-col min-h-screen w-full">
-    <TopBar :username="username" />
+    <TopBar :username="user.email" />
 
     <div class="h-screen flex-grow container mx-auto pb-8">
        <div class="flex flex-wrap pb-24">
@@ -11,7 +11,7 @@
           </div>
         </div>
        </div>
-      <BottomBar :selectedTab="state.selectedTab" />
+      <BottomBar :selectedTab="selectedTab" />
     </div>
   </div>
 </template>
@@ -28,29 +28,14 @@ export default {
     TopBar
   },
   props: {
-    username: {
+    user: {
+      type: Object,
+      default: () => ({})
+    },
+    selectedTab: {
       type: String,
-      default: () => 'Guest'
+      default: () => ''
     }
-  },
-  setup() {
-    const state = reactive({
-      selectedTab: 'movies'
-    });
-
-    eventBus.$on('movies-selected', () => {
-      state.selectedTab = 'movies';
-    });
-    eventBus.$on('books-selected', () => {
-      state.selectedTab = 'books';
-    });
-    eventBus.$on('account-selected', () => {
-      state.selectedTab = 'account';
-    });
-
-    return {
-      state
-    };
   }
 };
 </script>

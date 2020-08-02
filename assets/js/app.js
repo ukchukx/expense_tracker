@@ -33,6 +33,7 @@ import axios from 'axios';
 
 import Signin from '@/components/Signin';
 import Signup from '@/components/Signup';
+import Budget from '@/components/Budget';
 
 Vue.config.productionTip = false;
 
@@ -44,5 +45,6 @@ if (token) {
 Vue.use(VueCompositionAPI);
 Vue.component(Signin.name, Signin);
 Vue.component(Signup.name, Signup);
+Vue.component(Budget.name, Budget);
 
 new Vue({ el: '#app' });
