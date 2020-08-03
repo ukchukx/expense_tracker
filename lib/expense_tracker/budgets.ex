@@ -92,6 +92,11 @@ defmodule ExpenseTracker.Budgets do
 
   def expense_items_for_user(user_id), do: user_id |> ExpenseItems.for_user |> Queries.fetch_all
 
+  def current_budget?(budget) do
+    today = Date.utc_today()
+    today.year == budget.start_date.year and today.month == budget.start_date.month
+  end
+
   def calculate_line_item_expensed_values_for_budgets(budgets) when is_list(budgets) do
     Enum.map(budgets, &calculate_line_item_expensed_values_for_budget/1)
   end

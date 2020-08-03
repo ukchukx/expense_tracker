@@ -13,9 +13,7 @@ defmodule ExpenseTracker.Web.PageController do
       |> case do
         [] -> {nil, []}
         [latest_budget | other_budgets] = budgets ->
-          today = Date.utc_today()
-
-          case today.year == latest_budget.start_date.year and today.month == latest_budget.start_date.month do
+          case Budgets.current_budget?(latest_budget) do
             true -> {latest_budget, other_budgets}
             false -> {nil, budgets}
           end
@@ -58,9 +56,29 @@ defmodule ExpenseTracker.Web.PageController do
       user_id
       |> Budgets.budgets_for_user
       |> Budgets.calculate_line_item_expensed_values_for_budgets
-      |> Enum.map(fn budget -> %{budget | href: Routes.page_path(conn, :budget_details, budget.id)} end)
+      |> Enum.map(fn budget ->
+        href =
+          case Budgets.current_budget?(budget) do
+            false -> Routes.page_path(conn, :budget_details, budget.id)
+            true -> "#"
+          end
+
+        %{budget | href: href}
+      end)
 
     render conn, "budgets.html", user: user, budgets: budgets, page_title: "Budgets"
+  end
+
+  def budget_details(%{assigns: %{current_user: %{"id" => user_id} = user}} = conn, %{"b" => id}) do
+    {:ok, budget} = Budgets.budget_by_id(id)
+
+    case Budgets.current_budget?(budget) do
+      true ->
+        redirect(conn, to: Routes.page_path(conn, :budgets))
+      false ->
+        budget = %{name: name} = Budgets.calculate_line_item_expensed_values_for_budget(budget)
+        render conn, "budget_details.html", user: user, budget: budget, page_title: "Budget - #{name}"
+    end
   end
 
   def catch_all(conn, _), do: redirect(conn, to: Routes.page_path(conn, :index))

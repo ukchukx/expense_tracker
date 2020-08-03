@@ -36,6 +36,8 @@ import Signup from '@/components/Signup';
 import Budget from '@/components/Budget';
 import Account from '@/components/Account';
 import Budgets from '@/components/Budgets';
+import Page from '@/components/Page';
+import CurrentBudget from '@/components/CurrentBudget';
 
 Vue.config.productionTip = false;
 
@@ -50,5 +52,7 @@ Vue.component(Signup.name, Signup);
 Vue.component(Budget.name, Budget);
 Vue.component(Account.name, Account);
 Vue.component(Budgets.name, Budgets);
+Vue.component(Page.name, Page);
+Vue.component(CurrentBudget.name, CurrentBudget);
 
 new Vue({ el: '#app' });
