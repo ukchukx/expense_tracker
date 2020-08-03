@@ -1,0 +1,5 @@
+<div id="app">
+  <budgets
+    :budgets="<%= Jason.encode!(@budgets) %>"
+    :user="<%= Jason.encode!(@user) %>" />
+</div>

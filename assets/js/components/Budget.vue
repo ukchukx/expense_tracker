@@ -1,6 +1,6 @@
 <template>
   <!-- eslint-disable -->
-  <Page v-if="hasBudget" :user="user">
+  <Page v-if="hasBudget" :user="user" selected-tab="budget">
     <CurrentBudget :budget="state.budget" />
   </Page>
   <CreateBudget v-else @budget-created="budgetCreated" />
@@ -29,20 +29,8 @@ export default {
     }
   },
   setup(props) {
-    const budget = {
-      name: 'August, 2020',
-      start_date: '2020-08-02',
-      end_date: '2020-08-31',
-      line_items: [
-        { amount: 1000000, description: 'Budget item #1', expensed: 0 },
-        { amount: 1000000, description: 'Budget item #1', expensed: 5000000 },
-        { amount: 2000000, description: 'Budget item #2', expensed: 500000 },
-        { amount: 3000000, description: 'Budget item #3', expensed: 2800000 }
-      ]
-    };
     const state = reactive({
-      // budget: props.currentBudget
-      budget
+      budget: props.currentBudget
     });
 
     const hasBudget = computed(() => state.budget !== null);

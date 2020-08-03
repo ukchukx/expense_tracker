@@ -88,6 +88,34 @@ defmodule ExpenseTracker.Budgets do
 
   def expense_items_for_line_item(line_item_id), do: line_item_id |> ExpenseItems.for_line_item |> Queries.fetch_all
 
+  def expense_items_for_line_items(line_item_ids), do: line_item_ids |> ExpenseItems.for_line_items |> Queries.fetch_all
+
   def expense_items_for_user(user_id), do: user_id |> ExpenseItems.for_user |> Queries.fetch_all
+
+  def calculate_line_item_expensed_values_for_budgets(budgets) when is_list(budgets) do
+    Enum.map(budgets, &calculate_line_item_expensed_values_for_budget/1)
+  end
+
+  def calculate_line_item_expensed_values_for_budget(budget = %{line_items: items}) do
+    expense_items_for_budget =
+      items
+      |> Enum.map(&(&1["id"]))
+      |> expense_items_for_line_items
+
+    items =
+      items
+      |> Enum.map(fn %{"id" => item_id} = item ->
+        total_expense_for_line_item =
+          expense_items_for_budget
+          |> Enum.filter(&(&1.line_item_id == item_id))
+          |> expense_items_total
+
+        Map.put(item, "expensed", total_expense_for_line_item)
+      end)
+
+    %{budget | line_items: items}
+  end
+
+  defp expense_items_total(items), do: Enum.reduce(items, 0, fn %{amount: amount}, sum -> sum + amount end)
 
 end

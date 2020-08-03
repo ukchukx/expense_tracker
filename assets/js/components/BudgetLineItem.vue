@@ -1,8 +1,10 @@
 <template>
   <!-- eslint-disable -->
   <div class="progressbar-wrapper flex mb-4 border-b border-gray-200">
-    <div class="w-2/3 whitespace-no-wrap text-xl h-12 text-left">{{ lineItem.description }}</div>
-    <div class="w-1/3 whitespace-no-wrap text-xl h-12 text-right">{{ formatAsNaira(lineItem.amount) }}</div>
+    <div class="w-2/3 whitespace-no-wrap text-xl h-12 text-left">
+      <a :href="href">{{ description }}</a>
+    </div>
+    <div class="w-1/3 whitespace-no-wrap text-xl h-12 text-right">{{ formatKoboAmount(amount) }}</div>
     <div class="progressbar" :style="barStyle"></div>
   </div>
 </template>
@@ -13,25 +15,35 @@ import useAmountFormatter from '@/features/useAmountFormatter';
 export default {
   name: 'BudgetLineItem',
   props: {
-    lineItem: {
-      type: Object,
+    description: {
+      type: String,
       required: true
+    },
+    amount: {
+      type: Number,
+      required: true
+    },
+    expensed: {
+      type: Number,
+      required: true
+    },
+    href: {
+      type: String,
+      default: () => '#'
     }
   },
   setup(props) {
-    const { amountFormatter } = useAmountFormatter();
-    const red = '#ED4024';
-    const yellow = '#F7C845';
-    const gray = '#BFBFBF';
+    const { formatKoboAmount } = useAmountFormatter();
+    const red = 'rgba(237, 64, 36, 0.4)';
+    const yellow = 'rgba(247, 200, 69, 0.4)';
+    const gray = 'rgba(191, 191, 191, 0.4)';
 
-    const barWidth = computed(() => (props.lineItem.expensed / props.lineItem.amount) * 100);
+    const barWidth = computed(() => (props.expensed / props.amount) * 100);
     const barColour = computed(() => barWidth.value <= 50 ? gray : (barWidth.value <= 95 ? yellow : red));
     const barStyle = computed(() => `width: ${barWidth.value}%; background-color: ${barColour.value};`);
 
-    const formatAsNaira = (koboAmount) => amountFormatter((koboAmount / 100).toFixed(2));
-
     return {
-      formatAsNaira,
+      formatKoboAmount,
       barStyle
     };
   }

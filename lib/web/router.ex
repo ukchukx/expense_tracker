@@ -20,6 +20,9 @@ defmodule ExpenseTracker.Web.Router do
 
     get "/", PageController, :index
     get "/account", PageController, :account
+    get "/budgets", PageController, :budgets
+    get "/budgets/:budget", PageController, :budget_details
+    get "/l/:line_item", PageController, :line_item
 
     get "/signup", SessionController, :signup
     post "/signup", SessionController, :create_account

@@ -10,6 +10,7 @@ defmodule ExpenseTracker.Projections.Budget do
     :start_date,
     :end_date,
     :line_items,
+    :href,
     :inserted_at,
     :updated_at
   ]
@@ -22,6 +23,7 @@ defmodule ExpenseTracker.Projections.Budget do
     field :start_date, :date
     field :end_date, :date
     field :line_items, {:array, :map}, default: []
+    field :href, :string, virtual: true
 
     timestamps(type: :utc_datetime)
   end

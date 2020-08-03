@@ -5,7 +5,12 @@
     <div class="flex flex-col mt-8">
       <div class="py-2">
         <div class="align-middle inline-block w-full">
-          <BudgetLineItem :line-item="lineItem" v-for="(lineItem, i) in budget.line_items" :key="i" />
+          <BudgetLineItem 
+            :amount="lineItem.amount"
+            :description="lineItem.description"
+            :expensed="lineItem.expensed"
+            :href="lineItem.href"
+            v-for="lineItem in budget.line_items" :key="lineItem.id" />
           <div class="flex mb-4 border-b border-gray-200">
             <div class="w-2/3 whitespace-no-wrap text-xl h-12 text-left"></div>
             <div class="w-1/3 whitespace-no-wrap text-xl bg-gray-50 font-medium text-gray-500 h-12 text-right">{{ totalAmount }}</div>
@@ -33,16 +38,12 @@ export default {
     }
   },
   setup(props) {
-    const { amountFormatter } = useAmountFormatter();
+    const { formatKoboAmount } = useAmountFormatter();
 
-    onMounted(() => {
-      console.log('received', props.budget);
-    });
-    const totalAmount = computed(() => amountFormatter(totalBudgetAmount(props.budget)));
+    const totalAmount = computed(() => formatKoboAmount(totalBudgetAmount(props.budget)));
 
     return {
-      totalAmount,
-      amountFormatter
+      totalAmount
     };
   }
 };

@@ -34,6 +34,8 @@ import axios from 'axios';
 import Signin from '@/components/Signin';
 import Signup from '@/components/Signup';
 import Budget from '@/components/Budget';
+import Account from '@/components/Account';
+import Budgets from '@/components/Budgets';
 
 Vue.config.productionTip = false;
 
@@ -46,5 +48,7 @@ Vue.use(VueCompositionAPI);
 Vue.component(Signin.name, Signin);
 Vue.component(Signup.name, Signup);
 Vue.component(Budget.name, Budget);
+Vue.component(Account.name, Account);
+Vue.component(Budgets.name, Budgets);
 
 new Vue({ el: '#app' });
