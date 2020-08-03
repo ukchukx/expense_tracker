@@ -15,7 +15,7 @@
     "phoenix_html": "file:../deps/phoenix_html",
     "phoenix_live_view": "file:../deps/phoenix_live_view",
     "vue": "^2.6.11",
-    "vue-naira-input": "^1.1.0"
+    "vue-naira-input": "^1.1.2"
   },
   "devDependencies": {
     "@babel/core": "^7.10.4",

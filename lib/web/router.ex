@@ -15,29 +15,13 @@ defmodule ExpenseTracker.Web.Router do
 
   pipeline :auth, do: plug ExpenseTracker.Web.Plugs.LoadCurrentUser
 
-  scope "/", ExpenseTracker.Web do
-    pipe_through [:browser, :auth]
-
-    get "/", PageController, :index
-    get "/account", PageController, :account
-    get "/budgets", PageController, :budgets
-    get "/budgets/:b", PageController, :budget_details
-    get "/l/:line_item", PageController, :line_item
-
-    get "/signup", SessionController, :signup
-    post "/signup", SessionController, :create_account
-    get "/signin", SessionController, :signin
-    post "/signin", SessionController, :create_session
-    get "/signout", SessionController, :delete_session
-
-    get "/*path", PageController, :catch_all
-  end
-
   # Other scopes may use custom stacks.
   scope "/api", ExpenseTracker.Web do
     pipe_through [:api, :fetch_session, :auth]
 
     post "/budgets", PageController, :create_budget
+    post "/expenses", PageController, :create_expense
+    delete "/expenses/:id", PageController, :delete_expense
   end
 
   # Enables LiveDashboard only for development
@@ -54,5 +38,23 @@ defmodule ExpenseTracker.Web.Router do
       pipe_through :browser
       live_dashboard "/dashboard", metrics: ExpenseTracker.Web.Telemetry
     end
+  end
+
+  scope "/", ExpenseTracker.Web do
+    pipe_through [:browser, :auth]
+
+    get "/", PageController, :index
+    get "/account", PageController, :account
+    get "/budgets", PageController, :budgets
+    get "/budgets/:b", PageController, :budget_details
+    get "/l/:b/:i", PageController, :line_item
+
+    get "/signup", SessionController, :signup
+    post "/signup", SessionController, :create_account
+    get "/signin", SessionController, :signin
+    post "/signin", SessionController, :create_session
+    get "/signout", SessionController, :delete_session
+
+    get "/*path", PageController, :catch_all
   end
 end

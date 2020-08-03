@@ -38,6 +38,7 @@ import Account from '@/components/Account';
 import Budgets from '@/components/Budgets';
 import Page from '@/components/Page';
 import CurrentBudget from '@/components/CurrentBudget';
+import LineItem from '@/components/LineItem';
 
 Vue.config.productionTip = false;
 
@@ -54,5 +55,6 @@ Vue.component(Account.name, Account);
 Vue.component(Budgets.name, Budgets);
 Vue.component(Page.name, Page);
 Vue.component(CurrentBudget.name, CurrentBudget);
+Vue.component(LineItem.name, LineItem);
 
 new Vue({ el: '#app' });

@@ -1,0 +1,8 @@
+<div id="app">
+  <page :user="<%= Jason.encode!(@user) %>" selected-tab="none">
+    <line-item
+      :item="<%= Jason.encode!(@item) %>"
+      budget-id="<%= @budget_id %>"
+      :expense-items="<%= Jason.encode!(@expense_items) %>" />
+  </page>
+</div>

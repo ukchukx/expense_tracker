@@ -1,7 +1,7 @@
 <template>
   <!-- eslint-disable -->
   <div class="progressbar-wrapper flex mb-4 border-b border-gray-200">
-    <div class="w-2/3 whitespace-no-wrap text-xl h-12 text-left">
+    <div class="w-2/3 whitespace-no-wrap text-xl h-12 text-left truncate">
       <a :href="href">{{ description }}</a>
     </div>
     <div class="w-1/3 whitespace-no-wrap text-xl h-12 text-right">{{ formatKoboAmount(amount) }}</div>

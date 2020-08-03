@@ -1,5 +1,5 @@
 <div id="app">
-<page :user="<%= Jason.encode!(@user) %>" selected-tab="none">
-  <current-budget :budget="<%= Jason.encode!(@budget) %>" />
-</page>
+  <page :user="<%= Jason.encode!(@user) %>" selected-tab="none">
+    <current-budget :budget="<%= Jason.encode!(@budget) %>" />
+  </page>
 </div>

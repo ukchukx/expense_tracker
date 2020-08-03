@@ -31,7 +31,7 @@
           <table class="w-full">
             <tbody>
               <tr v-for="(lineItem, i) in state.budget.line_items" :key="i">
-                <td class="py-3 whitespace-no-wrap text-left border-b border-gray-200">
+                <td class="py-3 whitespace-no-wrap text-left border-b border-gray-200 truncate">
                   {{ lineItem.description }}
                 </td>
                 <td class="py-3 whitespace-no-wrap border-b border-gray-200">
@@ -95,7 +95,8 @@ export default {
     const trimmedDescription = computed(() => state.form.description.trim());
     const hasDescription = computed(() => !!trimmedDescription.value);
     const hasAmount = computed(() => !!state.form.amount);
-    const descriptionUnique = computed(() => state.budget.line_items.every(({ description }) => description !== trimmedDescription.value));
+    const descriptionUnique = computed(() => 
+      state.budget.line_items.every(({ description }) => description !== trimmedDescription.value));
     const canAddItem = computed(() => hasAmount.value && hasDescription.value && descriptionUnique.value);
     const totalAmount = computed(() => amountFormatter(totalBudgetAmount(state.budget)));
 
@@ -105,13 +106,13 @@ export default {
       state.form.description = trimmedDescription.value;
       state.budget.line_items.push(state.form);
       state.form = { ...initialFormValues };
-      refs.amountInput.amount = '10000'; // Hack
+      refs.amountInput.reset();
     };
     const removeLineItem = (i) => state.budget.line_items.splice(i, 1);
     const createBudget = () => {
       const params = { ...state.budget };
-      params.line_items = params.line_items.map(x => ({ ...x, amount: x.amount * 100 })); // convert amounts to kobo
-       axios.post('/api/budgets', params)
+      params.line_items = params.line_items.map((x) => ({ ...x, amount: x.amount * 100 })); // convert amounts to kobo
+      axios.post('/api/budgets', params)
         .then(({ data: { data } }) => {
           emit('budget-created', data);
         });

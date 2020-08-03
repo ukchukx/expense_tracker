@@ -1,19 +1,17 @@
-const monthName = (month) => {
-  return [
-    'January', 
-    'February', 
-    'March', 
-    'April', 
-    'May', 
-    'June', 
-    'July', 
-    'August', 
-    'September', 
-    'October', 
-    'November', 
-    'December'
-  ][month];
-};
+const monthName = (month) => [
+  'January', 
+  'February', 
+  'March', 
+  'April', 
+  'May', 
+  'June', 
+  'July', 
+  'August', 
+  'September', 
+  'October', 
+  'November', 
+  'December'][month];
+
 const moneyFormatter = new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN' });
 
 const displayAmount = (amount) => moneyFormatter.format(amount);
