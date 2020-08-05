@@ -29,5 +29,13 @@ defmodule ExpenseTracker.BudgetTest do
       assert :ok = Budgets.delete_budget(budget)
       assert {:error, :not_found} = Budgets.budget_by_id(budget_id)
     end
+
+    test "can only be created once with the same name" do
+      assert {:ok, %Budget{id: budget_id, user_id: user_id} = a} = fixture(:budget)
+      context = %{user: %{id: user_id}}
+      params = ExpenseTracker.Factory.build_budget_params()
+      assert {:ok, %Budget{id: existing_budget_id} = b} = Budgets.create_budget(params, context)
+      assert budget_id == existing_budget_id
+    end
   end
 end

@@ -40,12 +40,13 @@ defmodule ExpenseTracker.Budgets do
     struct(CreateExpenseItem, attrs)
   end
 
-  def create_budget(%{} = attrs, %{user: %{}} = context) do
-    attrs
-    |> build_create_budget_command(context)
-    |> Commands.dispatch
-    |> case do
-      {:ok, %{id: id}} -> budget_by_id(id)
+  def create_budget(%{start_date: d} = attrs, %{user: %{id: user_id}} = context) do
+    with budget_name = Utils.budget_name(d),
+         {:error, :not_found} <- by_name_and_user(budget_name, user_id),
+         {:ok, %{id: id}} <- attrs |> build_create_budget_command(context) |> Commands.dispatch do
+      budget_by_id(id)
+    else
+      {:ok, _} = existing_budget -> existing_budget
       response -> response
     end
   end
@@ -79,6 +80,8 @@ defmodule ExpenseTracker.Budgets do
   end
 
   def budget_by_id(id), do: Budget |> ById.one(id) |> Queries.fetch_one
+
+  def by_name_and_user(name, user_id), do: name |> Budgets.by_name_and_user(user_id) |> Queries.fetch_one
 
   def budgets_for_user(user_id), do: user_id |> Budgets.for_user |> Queries.fetch_all
 
