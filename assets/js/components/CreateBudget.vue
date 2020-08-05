@@ -97,7 +97,9 @@ export default {
     const hasAmount = computed(() => !!state.form.amount);
     const descriptionUnique = computed(() => 
       state.budget.line_items.every(({ description }) => description !== trimmedDescription.value));
-    const canAddItem = computed(() => hasAmount.value && hasDescription.value && descriptionUnique.value);
+    const isDescriptionValid = computed(() => trimmedDescription.value.toLowerCase() !== 'unbudgeted');
+    const canAddItem = computed(() => 
+      hasAmount.value && hasDescription.value && descriptionUnique.value && isDescriptionValid.value);
     const totalAmount = computed(() => amountFormatter(totalBudgetAmount(state.budget)));
 
     const addItem = () => {

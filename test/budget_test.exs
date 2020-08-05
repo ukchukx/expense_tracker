@@ -37,5 +37,10 @@ defmodule ExpenseTracker.BudgetTest do
       assert {:ok, %Budget{id: existing_budget_id} = b} = Budgets.create_budget(params, context)
       assert budget_id == existing_budget_id
     end
+
+    test "adds an unbudgeted item on creation" do
+      assert {:ok, %Budget{line_items: items}} = fixture(:budget)
+      assert Enum.any?(items, &(&1["description"] == "Unbudgeted"))
+    end
   end
 end

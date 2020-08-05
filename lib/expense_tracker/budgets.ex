@@ -27,7 +27,9 @@ defmodule ExpenseTracker.Budgets do
       |> Map.put(:budget_id, Ecto.UUID.generate())
       |> Map.put(:line_items, items)
 
-    struct(CreateBudget, attrs)
+    CreateBudget
+    |> struct(attrs)
+    |> CreateBudget.add_un_budgeted_item
   end
 
   def build_create_expense_item_command(%{} = attrs, %{budget: %{id: id}, line_item: %{id: item_id}} = _context) do

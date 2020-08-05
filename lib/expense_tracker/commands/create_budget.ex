@@ -1,7 +1,20 @@
 defmodule ExpenseTracker.Commands.CreateBudget do
   defstruct [:user_id, :budget_id, :name, :start_date, :end_date, :line_items]
 
+  @unbudgeted_description "Unbudgeted"
+
   def assign_id(%__MODULE__{} = command, id), do: %__MODULE__{command | budget_id: id}
+
+  def add_un_budgeted_item(%__MODULE__{line_items: line_items} = command) do
+    line_items =
+      case Enum.any?(line_items, &(&1.description == @unbudgeted_description)) do
+        false ->
+          List.insert_at(line_items, -1, %{amount: 0, description: @unbudgeted_description, id: Ecto.UUID.generate()})
+        true -> line_items
+      end
+
+    %{command | line_items: line_items}
+  end
 
 end
 

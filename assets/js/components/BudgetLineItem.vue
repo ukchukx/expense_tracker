@@ -39,7 +39,9 @@ export default {
     const gray = 'rgba(191, 191, 191, 0.4)';
 
     const barWidth = computed(() => (props.expensed / props.amount) * 100);
-    const barColour = computed(() => barWidth.value <= 50 ? gray : (barWidth.value <= 95 ? yellow : red));
+    const isUnbudgeted = computed(() => props.description  === 'Unbudgeted');
+    const barColour = computed(() => 
+      isUnbudgeted.value ? red : (barWidth.value <= 50 ? gray : (barWidth.value <= 95 ? yellow : red)));
     const barStyle = computed(() => `width: ${barWidth.value}%; background-color: ${barColour.value};`);
 
     return {
