@@ -22,7 +22,7 @@ const getDateString = (date) => {
   const mm = date.getMonth() + 1;
   const dd = date.getDate();
 
-  return `${date.getFullYear()}-${mm > 10 ? mm : `0${mm}`}-${dd > 10 ? dd : `0${dd}`}`;
+  return `${date.getFullYear()}-${mm >= 10 ? mm : `0${mm}`}-${dd >= 10 ? dd : `0${dd}`}`;
 };
 
 const currentBudgetName = () => {
