@@ -6,25 +6,29 @@ defmodule ExpenseTracker.Web.PageController do
   require Logger
 
   def index(%{assigns: %{current_user: %{"id" => user_id} = user}} = conn, _) do
-    {current_budget, other_budgets, title} =
+    {current_budget, previous_budget, title} =
       user_id
       |> Budgets.budgets_for_user
       |> Budgets.calculate_line_item_expensed_values_for_budgets
       |> case do
-        [] -> {nil, [], "Home"}
-        [latest_budget = %{line_items: items, id: id, name: name} | other_budgets] = budgets ->
+        [] -> {nil, nil, "Home"}
+        [latest_budget = %{line_items: items, id: id, name: name} | other_budgets] ->
           case Budgets.current_budget?(latest_budget) do
             true ->
               items = Enum.map(items, fn item ->
                 Map.put(item, "href", Routes.page_path(conn, :line_item, id, item["id"]))
               end)
-              {%{latest_budget | line_items: items}, other_budgets, name}
+              {%{latest_budget | line_items: items}, List.first(other_budgets), name}
 
-            false -> {nil, budgets, "Home"}
+            false -> {nil, latest_budget, "Home"}
           end
       end
 
-    render conn, "index.html", user: user, budgets: other_budgets, current_budget: current_budget, page_title: title
+    render conn, "index.html",
+      user: user,
+      previous_budget: previous_budget,
+      current_budget: current_budget,
+      page_title: title
   end
 
   def index(conn, _), do: redirect(conn, to: Routes.session_path(conn, :signin))

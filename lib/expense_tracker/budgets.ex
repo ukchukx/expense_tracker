@@ -85,7 +85,8 @@ defmodule ExpenseTracker.Budgets do
 
   def by_name_and_user(name, user_id), do: name |> Budgets.by_name_and_user(user_id) |> Queries.fetch_one
 
-  def budgets_for_user(user_id), do: user_id |> Budgets.for_user |> Queries.fetch_all
+  def budgets_for_user(user_id),
+    do: user_id |> Budgets.for_user |> Budgets.latest_first |> Queries.fetch_all
 
   def expense_item_by_id(id), do: ExpenseItem |> ById.one(id) |> Queries.fetch_one
 

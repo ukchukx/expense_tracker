@@ -16,7 +16,7 @@ const moneyFormatter = new Intl.NumberFormat('en-NG', { style: 'currency', curre
 
 const displayAmount = (amount) => moneyFormatter.format(amount);
 
-const totalBudgetAmount = (budget) => budget.line_items.reduce((sum, { amount }) => sum + amount, 0);
+const totalBudgetAmount = (budget) => budget.line_items.reduce((sum, { amount }) => sum + +amount, 0);
 
 const getDateString = (date) => {
   const mm = date.getMonth() + 1;

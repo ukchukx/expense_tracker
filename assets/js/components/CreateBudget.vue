@@ -55,7 +55,7 @@
         </div>
       </div>
       <button @click="createBudget" class="bg-teal-500 text-white font-bold py-2 px-4 rounded">
-        Save budget
+        Create budget
       </button>
     </div>
   </div>
@@ -77,16 +77,25 @@ export default {
   components: {
     NairaInput
   },
+  props: {
+    previousBudget: {
+      type: Object,
+      default: () => null
+    }
+  },
   setup(props, { refs, emit }) {
     const initialFormValues = { amount: 10000, description: '' };
-    const { amountFormatter } = useAmountFormatter();
+    const { amountFormatter, koboAmountToNaira } = useAmountFormatter();
+    const line_items = (props.previousBudget || { line_items: [] }).line_items
+      .filter(({ description }) => description !== 'Unbudgeted')
+      .map(({ amount, description }) => ({ amount: koboAmountToNaira(amount), description }));
 
     const state = reactive({
       budget: {
         name: currentBudgetName(),
         start_date: currentBudgetStartDate(),
         end_date: currentBudgetEndDate(),
-        line_items: []
+        line_items
       },
       form: { ...initialFormValues }
     });

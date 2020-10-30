@@ -3,7 +3,7 @@
   <Page v-if="hasBudget" :user="user" selected-tab="budget">
     <CurrentBudget :budget="state.budget" />
   </Page>
-  <CreateBudget v-else @budget-created="budgetCreated" />
+  <CreateBudget v-else @budget-created="budgetCreated" :previous-budget="previousBudget" />
 </template>
 <script>
 import { computed, reactive } from '@vue/composition-api';
@@ -20,6 +20,10 @@ export default {
   },
   props: {
     currentBudget: {
+      type: Object,
+      default: () => null
+    },
+    previousBudget: {
       type: Object,
       default: () => null
     },

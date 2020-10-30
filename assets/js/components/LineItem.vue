@@ -20,7 +20,7 @@
           :disabled="!canAddExpense"
           class="flex-shrink-0 bg-teal-500 border-teal-500 text-sm border-4 text-white py-1 px-2 rounded" 
           type="button">
-          Add
+          Add expense
         </button>
       </div>
     </form>
@@ -111,8 +111,6 @@ export default {
       axios.post('/api/expenses', params)
         .then(({ data: { data } }) => {
           state.expenseItems.push(data);
-          state.form = { ...initialFormValues };
-          refs.amountInput.reset();
         });
     };
     const deleteExpense = (index) => {

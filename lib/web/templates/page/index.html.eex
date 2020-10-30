@@ -1,6 +1,6 @@
 <div id="app">
   <budget
-    :budgets="<%= Jason.encode!(@budgets) %>"
+    :previous-budget="<%= Jason.encode!(@previous_budget) %>"
     :user="<%= Jason.encode!(@user) %>"
     :current-budget="<%= Jason.encode!(@current_budget) %>" />
 </div>
