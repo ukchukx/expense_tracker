@@ -34,9 +34,9 @@ export default {
   },
   setup(props) {
     const { formatKoboAmount } = useAmountFormatter();
-    const red = 'rgba(237, 64, 36, 0.4)';
-    const yellow = 'rgba(247, 200, 69, 0.4)';
-    const gray = 'rgba(191, 191, 191, 0.4)';
+    const red = 'rgba(237, 64, 36, 0.1)';
+    const yellow = 'rgba(247, 200, 69, 0.1)';
+    const gray = 'rgba(191, 191, 191, 0.1)';
 
     const barWidth = computed(() => (props.expensed / (props.amount ? props.amount : props.expensed)) * 100);
     const isUnbudgeted = computed(() => props.description === 'Unbudgeted');
