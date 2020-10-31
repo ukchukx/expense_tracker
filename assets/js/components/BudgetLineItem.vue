@@ -4,12 +4,12 @@
     <div class="w-2/3 whitespace-no-wrap text-xl h-12 text-left truncate">
       <a :href="href">{{ description }}</a>
     </div>
-    <div class="w-1/3 whitespace-no-wrap text-xl h-12 text-right">{{ formatKoboAmount(amount) }}</div>
+    <div class="w-1/3 whitespace-no-wrap text-xl h-12 text-right">{{ formatKoboAmount(effectiveAmount) }}</div>
     <div class="progressbar" :style="barStyle"></div>
   </div>
 </template>
 <script>
-import { computed, reactive } from '@vue/composition-api';
+import { computed } from '@vue/composition-api';
 import useAmountFormatter from '@/features/useAmountFormatter';
 
 export default {
@@ -38,16 +38,14 @@ export default {
     const yellow = 'rgba(247, 200, 69, 0.4)';
     const gray = 'rgba(191, 191, 191, 0.4)';
 
-    const barWidth = computed(() => (props.expensed / props.amount) * 100);
-    const isUnbudgeted = computed(() => props.description  === 'Unbudgeted');
+    const barWidth = computed(() => (props.expensed / (props.amount ? props.amount : props.expensed)) * 100);
+    const isUnbudgeted = computed(() => props.description === 'Unbudgeted');
     const barColour = computed(() => 
       isUnbudgeted.value ? red : (barWidth.value <= 50 ? gray : (barWidth.value <= 95 ? yellow : red)));
     const barStyle = computed(() => `width: ${barWidth.value}%; background-color: ${barColour.value};`);
+    const effectiveAmount = computed(() => isUnbudgeted.value ? props.expensed : props.amount);
 
-    return {
-      formatKoboAmount,
-      barStyle
-    };
+    return { formatKoboAmount, effectiveAmount, barStyle };
   }
 };
 </script>

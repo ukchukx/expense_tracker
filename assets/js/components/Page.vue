@@ -18,8 +18,6 @@
 <script>
 import TopBar from '@/components/TopBar';
 import BottomBar from '@/components/BottomBar';
-import eventBus from '@/eventBus';
-import { reactive } from '@vue/composition-api';
 
 export default {
   name: 'Page',

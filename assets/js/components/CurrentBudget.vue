@@ -21,7 +21,7 @@
   </div> 
 </template>
 <script>
-import { computed, reactive, onMounted } from '@vue/composition-api';
+import { computed } from '@vue/composition-api';
 import { totalBudgetAmount } from '@/features/budgetUtils';
 import useAmountFormatter from '@/features/useAmountFormatter';
 import BudgetLineItem from '@/components/BudgetLineItem';
