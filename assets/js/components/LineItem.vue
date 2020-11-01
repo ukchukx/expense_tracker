@@ -20,7 +20,7 @@
           :disabled="!canAddExpense"
           class="flex-shrink-0 bg-teal-500 border-teal-500 text-sm border-4 text-white py-1 px-2 rounded" 
           type="button">
-          Add expense
+          {{ addExpenseButtonLabel }}
         </button>
       </div>
     </form>
@@ -32,6 +32,8 @@
               <tr v-for="(item, i) in state.expenseItems" :key="item.id">
                 <td class="py-3 truncate text-left border-b border-gray-200">
                   {{ item.description }}
+                  <br>
+                  <span class="text-xs text-gray-500">{{ item.inserted_at }}</span>
                 </td>
                 <td class="py-3 whitespace-no-wrap text-right border-b border-gray-200">
                   {{ formatKoboAmount(item.amount) }}
@@ -59,6 +61,7 @@
 <script>
 import { reactive, computed } from '@vue/composition-api';
 import NairaInput from 'vue-naira-input';
+import { format } from 'date-fns';
 import axios from 'axios';
 import useAmountFormatter from '@/features/useAmountFormatter';
 
@@ -88,18 +91,21 @@ export default {
       budget_id: props.budgetId,
       line_item_id: props.item.id
     };
+    const formatDate = (isoDate) => format(new Date(isoDate), 'HH:mm, do');
     const { formatKoboAmount } = useAmountFormatter();
 
     const state = reactive({
-      expenseItems: [...props.expenseItems],
-      form: { ...initialFormValues }
+      expenseItems: [...props.expenseItems].map((d) => ({ ...d, inserted_at: formatDate(d.inserted_at) })),
+      form: { ...initialFormValues },
+      busy: false
     });
 
     const placeholder = computed(() => props.item.description);
     const trimmedDescription = computed(() => state.form.description.trim());
     const hasDescription = computed(() => !!trimmedDescription.value);
     const hasAmount = computed(() => !!state.form.amount);
-    const canAddExpense = computed(() => hasAmount.value && hasDescription.value);
+    const canAddExpense = computed(() => hasAmount.value && hasDescription.value && !state.busy);
+    const addExpenseButtonLabel = computed(() => state.busy ? 'Busy...' : 'Add expense');
     const totalAmount = computed(() => 
       formatKoboAmount(state.expenseItems.reduce((sum, { amount }) => sum + amount, 0)));
 
@@ -108,9 +114,15 @@ export default {
 
       const params = { ...state.form, amount: state.form.amount * 100 };
       params.description = trimmedDescription.value;
+      state.busy = true;
+
       axios.post('/api/expenses', params)
         .then(({ data: { data } }) => {
-          state.expenseItems.push(data);
+          state.expenseItems = [{ ...data, inserted_at: formatDate(data.inserted_at) }].concat(state.expenseItems);
+          state.form = { ...initialFormValues };
+        })
+        .finally(() => {
+          state.busy = false;
         });
     };
     const deleteExpense = (index) => {
@@ -126,6 +138,7 @@ export default {
 
     return {
       state,
+      addExpenseButtonLabel,
       placeholder,
       totalAmount,
       addExpense,
