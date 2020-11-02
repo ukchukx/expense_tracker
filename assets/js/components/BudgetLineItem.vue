@@ -41,7 +41,7 @@ export default {
     const barWidth = computed(() => (props.expensed / (props.amount ? props.amount : props.expensed)) * 100);
     const isUnbudgeted = computed(() => props.description === 'Unbudgeted');
     const barColour = computed(() => 
-      isUnbudgeted.value ? red : (barWidth.value <= 50 ? gray : (barWidth.value <= 95 ? yellow : red)));
+      isUnbudgeted.value ? red : (barWidth.value <= 85 ? gray : (barWidth.value <= 100 ? yellow : red)));
     const barStyle = computed(() => `width: ${barWidth.value}%; background-color: ${barColour.value};`);
     const effectiveAmount = computed(() => isUnbudgeted.value ? props.expensed : props.amount);
 
