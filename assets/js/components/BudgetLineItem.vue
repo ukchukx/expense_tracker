@@ -4,7 +4,10 @@
     <div class="w-2/3 whitespace-no-wrap text-xl h-12 text-left truncate">
       <a :href="href">{{ description }}</a>
     </div>
-    <div class="w-1/3 whitespace-no-wrap text-xl h-12 text-right">{{ formatKoboAmount(effectiveAmount) }}</div>
+    <div class="w-1/3 text-right">
+      <span class="whitespace-no-wrap text-xl h-12 text-right md:mr-4">{{ formatKoboAmount(amount) }}</span>
+      <span class="whitespace-no-wrap text-xl h-12 text-right">({{ formatKoboAmount(expensed) }})</span>
+    </div>
     <div class="progressbar" :style="barStyle"></div>
   </div>
 </template>
@@ -37,15 +40,15 @@ export default {
     const red = 'rgba(237, 64, 36, 0.1)';
     const yellow = 'rgba(247, 200, 69, 0.1)';
     const gray = 'rgba(191, 191, 191, 0.1)';
+    const expenseRatio = (props.expensed / (props.amount ? props.amount : props.expensed)) * 100;
 
-    const barWidth = computed(() => (props.expensed / (props.amount ? props.amount : props.expensed)) * 100);
+    const barWidth = computed(() => Math.min(100, expenseRatio));
     const isUnbudgeted = computed(() => props.description === 'Unbudgeted');
     const barColour = computed(() => 
-      isUnbudgeted.value ? red : (barWidth.value <= 85 ? gray : (barWidth.value <= 100 ? yellow : red)));
+      isUnbudgeted.value ? red : (expenseRatio <= 85 ? gray : (expenseRatio <= 100 ? yellow : red)));
     const barStyle = computed(() => `width: ${barWidth.value}%; background-color: ${barColour.value};`);
-    const effectiveAmount = computed(() => isUnbudgeted.value ? props.expensed : props.amount);
 
-    return { formatKoboAmount, effectiveAmount, barStyle };
+    return { formatKoboAmount, barStyle };
   }
 };
 </script>

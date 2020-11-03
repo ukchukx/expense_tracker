@@ -18,6 +18,8 @@ const displayAmount = (amount) => moneyFormatter.format(amount);
 
 const totalBudgetAmount = (budget) => budget.line_items.reduce((sum, { amount }) => sum + +amount, 0);
 
+const totalBudgetExpense = (budget) => budget.line_items.reduce((sum, { expensed }) => sum + +expensed, 0);
+
 const getDateString = (date) => {
   const mm = date.getMonth() + 1;
   const dd = date.getDate();
@@ -44,5 +46,6 @@ export {
   currentBudgetStartDate, 
   currentBudgetEndDate, 
   displayAmount,
-  totalBudgetAmount
+  totalBudgetAmount,
+  totalBudgetExpense
 };

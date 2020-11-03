@@ -118,7 +118,7 @@ export default {
 
       axios.post('/api/expenses', params)
         .then(({ data: { data } }) => {
-          state.expenseItems = [{ ...data, inserted_at: formatDate(data.inserted_at) }].concat(state.expenseItems);
+          state.expenseItems.push({ ...data, inserted_at: formatDate(data.inserted_at) });
           state.form = { ...initialFormValues };
         })
         .finally(() => {
