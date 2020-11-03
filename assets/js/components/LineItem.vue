@@ -12,7 +12,7 @@
           :placeholder="placeholder">
         <NairaInput 
           class="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none" 
-          :initial-amount="1000"
+          :initial-amount="state.form.amount"
           ref="amountInput"
           v-model="state.form.amount" />
         <button 
@@ -24,7 +24,7 @@
         </button>
       </div>
     </form>
-    <div class="flex flex-col mt-8" v-show="expenseItems.length">
+    <div class="flex flex-col mt-8" v-show="state.expenseItems.length">
       <div class="py-2">
         <div class="align-middle inline-block w-full">
           <table class="w-full">
@@ -85,18 +85,17 @@ export default {
     }
   },
   setup(props, { refs, emit }) {
-    const initialFormValues = { 
-      amount: 1000, 
-      description: props.item.description, 
-      budget_id: props.budgetId,
-      line_item_id: props.item.id
-    };
     const formatDate = (isoDate) => format(new Date(isoDate), 'HH:mm, do');
     const { formatKoboAmount } = useAmountFormatter();
 
     const state = reactive({
       expenseItems: [...props.expenseItems].map((d) => ({ ...d, inserted_at: formatDate(d.inserted_at) })),
-      form: { ...initialFormValues },
+      form: { 
+        amount: 0, 
+        description: '', 
+        budget_id: props.budgetId,
+        line_item_id: props.item.id
+      },
       busy: false
     });
 
@@ -119,7 +118,6 @@ export default {
       axios.post('/api/expenses', params)
         .then(({ data: { data } }) => {
           state.expenseItems.push({ ...data, inserted_at: formatDate(data.inserted_at) });
-          state.form = { ...initialFormValues };
         })
         .finally(() => {
           state.busy = false;
