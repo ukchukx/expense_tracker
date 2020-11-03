@@ -1,18 +1,17 @@
 # ExpenseTracker
 
-To start your Phoenix server:
+Required environment variables:
 
-  * Setup the project with `mix setup`
-  * Start Phoenix endpoint with `mix phx.server`
-
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
-
-Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).
-
-## Learn more
-
-  * Official website: https://www.phoenixframework.org/
-  * Guides: https://hexdocs.pm/phoenix/overview.html
-  * Docs: https://hexdocs.pm/phoenix
-  * Forum: https://elixirforum.com/c/phoenix-forum
-  * Source: https://github.com/phoenixframework/phoenix
+```
+ET_DB_USER=<string>
+ET_DB_PASS=<string>
+ET_READ_DB=<string>
+ET_EVENT_DB=<string>
+ET_TEST_READ_DB=<string>
+ET_TEST_EVENT_DB=<string>
+ET_DB_HOST=<string>
+ET_DNS_ADDR=<string>
+ET_DB_POOL_SIZE=<integer>
+ET_HTTP_PORT=<integer>
+ET_SECRET_KEY_BASE=<string>
+```
