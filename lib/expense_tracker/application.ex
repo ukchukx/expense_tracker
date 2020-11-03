@@ -29,6 +29,11 @@ defmodule ExpenseTracker.Application do
     case Supervisor.start_link(children, opts) do
       {:ok, _} = res ->
         ExpenseTracker.TelemetryReporter.setup()
+
+        if Application.get_env(:expense_tracker, :env) != :test do
+          ExpenseTracker.Support.Migrate.run()
+        end
+
         res
       err_res -> err_res
     end
