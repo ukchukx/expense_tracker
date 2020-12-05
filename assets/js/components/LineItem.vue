@@ -3,11 +3,12 @@
   <div class="px-4 py-3 rounded relative mb-3 bg-white p-4 flex flex-col justify-between leading-normal text-center">
     <h2 class="text-5xl">{{ item.description }}</h2>
 
-    <form class="w-full invisible md:visible">
+    <form class="w-full hidden md:block">
       <div class="flex items-center py-2">
         <input 
           class="appearance-none bg-transparent border-b border-teal-500 w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none" 
           type="text" 
+          list="suggestions"
           v-model="state.form.description"
           @keyup.enter="addExpense"
           :placeholder="placeholder">
@@ -33,11 +34,12 @@
       </div>
     </form>
 
-    <form class="w-full visible md:invisible">
+    <form class="w-full md:hidden sm:block">
       <div class="flex items-center py-2">
         <input 
           class="appearance-none bg-transparent border-b border-teal-500 w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none" 
-          type="text" 
+          type="text"
+          list="suggestions"
           v-model="state.form.description"
           @keyup.enter="addExpense"
           :placeholder="placeholder">
@@ -66,6 +68,10 @@
         </button>
       </div>
     </form>
+
+    <datalist id="suggestions">
+      <option v-for="(description, i) in availableDescriptions" :key="i" :value="description" />
+    </datalist>
 
     <div class="flex flex-col mt-8" v-show="state.expenseItems.length">
       <div class="py-2">
@@ -146,6 +152,12 @@ export default {
       busy: false
     });
 
+    const availableDescriptions = computed(() => {
+      const set = new Set();
+      set.add(props.item.description);
+      state.expenseItems.forEach(({ description }) => set.add(description));
+      return set.values();
+    });
     const placeholder = computed(() => props.item.description);
     const trimmedDescription = computed(() => state.form.description.trim());
     const hasDescription = computed(() => !!trimmedDescription.value);
@@ -189,7 +201,8 @@ export default {
       addExpense,
       canAddExpense,
       deleteExpense,
-      formatKoboAmount
+      formatKoboAmount,
+      availableDescriptions
     };
   }
 };
