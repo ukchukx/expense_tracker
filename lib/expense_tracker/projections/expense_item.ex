@@ -10,6 +10,7 @@ defmodule ExpenseTracker.Projections.ExpenseItem do
     :line_item_id,
     :description,
     :amount,
+    :date,
     :inserted_at,
     :updated_at
   ]
@@ -21,6 +22,7 @@ defmodule ExpenseTracker.Projections.ExpenseItem do
     field :budget_id, :binary_id
     field :line_item_id, :binary_id
     field :description, :string
+    field :date, :string
     field :amount, :integer
 
     timestamps(type: :utc_datetime)

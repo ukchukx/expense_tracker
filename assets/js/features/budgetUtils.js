@@ -42,6 +42,7 @@ const currentBudgetEndDate = () => {
 };
 
 export { 
+  getDateString,
   currentBudgetName, 
   currentBudgetStartDate, 
   currentBudgetEndDate, 

@@ -36,7 +36,8 @@ defmodule ExpenseTracker.Factory do
       expense_item_id: Ecto.UUID.generate(),
       line_item_id: Ecto.UUID.generate(),
       description: Faker.Lorem.sentence(1..2),
-      amount: 10_000
+      amount: 10_000,
+      date: 4 |> Faker.Date.backward() |> Date.to_string
     }
   end
 

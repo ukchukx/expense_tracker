@@ -1,5 +1,5 @@
 defmodule ExpenseTracker.Commands.CreateExpenseItem do
-  defstruct [:expense_item_id, :budget_id, :line_item_id, :description, :amount]
+  defstruct [:expense_item_id, :budget_id, :line_item_id, :description, :amount, :date]
 
   def assign_id(%__MODULE__{} = command, id), do: %__MODULE__{command | expense_item_id: id}
 
@@ -15,6 +15,7 @@ defimpl ExpenseTracker.Protocol.ValidCommand, for: ExpenseTracker.Commands.Creat
     |> Kernel.++(validate_line_item_id(command.line_item_id))
     |> Kernel.++(validate_amount(command.amount))
     |> Kernel.++(validate_description(command.description))
+    |> Kernel.++(validate_date(command.date))
     |> case do
       []       -> :ok
       err_list -> {:error, err_list}
@@ -56,5 +57,17 @@ defimpl ExpenseTracker.Protocol.ValidCommand, for: ExpenseTracker.Commands.Creat
   defp validate_amount(x) when is_integer(x) and x > 0, do: []
 
   defp validate_amount(_), do: [{:amount, "is not a valid amount"}]
+
+  defp validate_date(nil), do: [{:date, "is not a string"}]
+
+  defp validate_date(""), do: [{:date, "cannot be empty"}]
+
+  defp validate_date(date) do
+    with {:ok, _valid_date} <- Date.from_iso8601(date) do
+      []
+    else
+      _ -> [{:date, "is not a valid date"}]
+    end
+  end
 
 end

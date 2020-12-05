@@ -2,19 +2,27 @@
   <!-- eslint-disable -->
   <div class="px-4 py-3 rounded relative mb-3 bg-white p-4 flex flex-col justify-between leading-normal text-center">
     <h2 class="text-5xl">{{ item.description }}</h2>
-    <form class="w-full max-w-sm">
-      <div class="flex items-center border-b border-teal-500 py-2">
+
+    <form class="w-full invisible md:visible">
+      <div class="flex items-center py-2">
         <input 
-          class="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none" 
+          class="appearance-none bg-transparent border-b border-teal-500 w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none" 
           type="text" 
           v-model="state.form.description"
           @keyup.enter="addExpense"
           :placeholder="placeholder">
         <NairaInput 
-          class="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none" 
+          class="appearance-none bg-transparent border-b border-teal-500 w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none" 
           :initial-amount="state.form.amount"
           ref="amountInput"
           v-model="state.form.amount" />
+        <input 
+          class="appearance-none bg-transparent border-b border-teal-500 w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none" 
+          type="date" 
+          :max="state.todayDate"
+          v-model="state.form.date"
+          placeholder="placeholder">
+          
         <button 
           @click="addExpense"
           :disabled="!canAddExpense"
@@ -24,6 +32,41 @@
         </button>
       </div>
     </form>
+
+    <form class="w-full visible md:invisible">
+      <div class="flex items-center py-2">
+        <input 
+          class="appearance-none bg-transparent border-b border-teal-500 w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none" 
+          type="text" 
+          v-model="state.form.description"
+          @keyup.enter="addExpense"
+          :placeholder="placeholder">
+      </div>
+      <div class="flex items-center py-2">
+        <NairaInput 
+          class="appearance-none bg-transparent border-b border-teal-500 w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none" 
+          :initial-amount="state.form.amount"
+          ref="amountInput"
+          v-model="state.form.amount" />
+      </div>
+      <div class="flex items-center py-2">
+        <input 
+          class="appearance-none bg-transparent border-b border-teal-500 w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none" 
+          type="date" 
+          :max="state.todayDate"
+          v-model="state.form.date">
+      </div>
+      <div class="flex items-center py-2">
+        <button 
+          @click="addExpense"
+          :disabled="!canAddExpense"
+          class="flex-shrink-0 bg-teal-500 border-teal-500 text-sm border-4 text-white py-1 px-2 rounded" 
+          type="button">
+          {{ addExpenseButtonLabel }}
+        </button>
+      </div>
+    </form>
+
     <div class="flex flex-col mt-8" v-show="state.expenseItems.length">
       <div class="py-2">
         <div class="align-middle inline-block w-full">
@@ -33,7 +76,7 @@
                 <td class="py-3 truncate text-left border-b border-gray-200">
                   {{ item.description }}
                   <br>
-                  <span class="text-xs text-gray-500">{{ item.inserted_at }}</span>
+                  <span class="text-xs text-gray-500">{{ item.date }}</span>
                 </td>
                 <td class="py-3 whitespace-no-wrap text-right border-b border-gray-200">
                   {{ formatKoboAmount(item.amount) }}
@@ -64,6 +107,7 @@ import NairaInput from 'vue-naira-input';
 import { format } from 'date-fns';
 import axios from 'axios';
 import useAmountFormatter from '@/features/useAmountFormatter';
+import { getDateString } from '@/features/budgetUtils';
 
 export default {
   name: 'LineItem',
@@ -85,14 +129,17 @@ export default {
     }
   },
   setup(props, { refs, emit }) {
-    const formatDate = (isoDate) => format(new Date(isoDate), 'HH:mm, do');
+    const formatDate = (isoDate) => format(new Date(isoDate), 'do');
     const { formatKoboAmount } = useAmountFormatter();
+    const todayDate = getDateString(new Date());
 
     const state = reactive({
-      expenseItems: [...props.expenseItems].map((d) => ({ ...d, inserted_at: formatDate(d.inserted_at) })),
+      expenseItems: [...props.expenseItems].map((d) => ({ ...d, date: formatDate(d.date) })),
+      todayDate,
       form: { 
         amount: 0, 
-        description: '', 
+        description: '',
+        date: todayDate,
         budget_id: props.budgetId,
         line_item_id: props.item.id
       },
@@ -117,7 +164,7 @@ export default {
 
       axios.post('/api/expenses', params)
         .then(({ data: { data } }) => {
-          state.expenseItems.push({ ...data, inserted_at: formatDate(data.inserted_at) });
+          state.expenseItems.push({ ...data, date: formatDate(data.date) });
         })
         .finally(() => {
           state.busy = false;
