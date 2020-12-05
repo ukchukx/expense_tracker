@@ -6,6 +6,7 @@
     </label>
     <input 
       v-model="input"
+      @keyup.enter="enterPressed"
       :name="name"
       :class="classes" 
       :type="type" 
@@ -71,6 +72,8 @@ export default {
 
     const classes = computed(() => errors.value.length && props.showErrors ? errorClasses : nonErrorClasses);
 
+    const enterPressed = () => emit('enter-pressed');
+    
     watch(
       () => errors.value,
       (newVal) => emit('errors', newVal),
@@ -88,7 +91,8 @@ export default {
     return {
       input,
       errors,
-      classes
+      classes,
+      enterPressed
     };
   }
 };

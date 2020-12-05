@@ -26,6 +26,7 @@
           v-model="state.password"
           :validators="passwordValidators"
           @errors="onPasswordErrors"
+          @enter-pressed="submitForm"
           :showErrors="false"
           class="mb-6" 
           label="Password" 
