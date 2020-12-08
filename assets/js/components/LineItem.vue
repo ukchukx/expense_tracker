@@ -138,9 +138,12 @@ export default {
     const formatDate = (isoDate) => format(new Date(isoDate), 'do');
     const { formatKoboAmount } = useAmountFormatter();
     const todayDate = getDateString(new Date());
+    const expenseItems = [...props.expenseItems]
+      .reverse()
+      .map((d) => ({ ...d, date: formatDate(d.date) }));
 
     const state = reactive({
-      expenseItems: [...props.expenseItems].map((d) => ({ ...d, date: formatDate(d.date) })),
+      expenseItems,
       todayDate,
       form: { 
         amount: 0, 
@@ -176,7 +179,7 @@ export default {
 
       axios.post('/api/expenses', params)
         .then(({ data: { data } }) => {
-          state.expenseItems.push({ ...data, date: formatDate(data.date) });
+          state.expenseItems.unshift({ ...data, date: formatDate(data.date) });
         })
         .finally(() => {
           state.busy = false;
