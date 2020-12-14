@@ -5,7 +5,7 @@ defmodule ExpenseTracker.Queries.Budgets do
 
   def for_user(user_id), do: from b in Budget, where: b.user_id == ^user_id
 
-  def latest_first(query), do: order_by(query, [b], [desc: b.inserted_at])
+  def latest_first(query), do: order_by(query, [b], [desc: b.start_date])
 
   def for_user(query, id), do: from q in query, where: q.user_id == ^id
 
