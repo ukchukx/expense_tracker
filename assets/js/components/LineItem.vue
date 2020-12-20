@@ -141,6 +141,9 @@ export default {
     const expenseItems = [...props.expenseItems]
       .reverse()
       .map((d) => ({ ...d, date: formatDate(d.date) }));
+    const availableDescriptions = new Set();
+    availableDescriptions.add(props.item.description);
+    expenseItems.forEach(({ description }) => availableDescriptions.add(description));
 
     const state = reactive({
       expenseItems,
@@ -155,12 +158,6 @@ export default {
       busy: false
     });
 
-    const availableDescriptions = computed(() => {
-      const set = new Set();
-      set.add(props.item.description);
-      state.expenseItems.forEach(({ description }) => set.add(description));
-      return set.values();
-    });
     const placeholder = computed(() => props.item.description);
     const trimmedDescription = computed(() => state.form.description.trim());
     const hasDescription = computed(() => !!trimmedDescription.value);
@@ -180,6 +177,7 @@ export default {
       axios.post('/api/expenses', params)
         .then(({ data: { data } }) => {
           state.expenseItems.unshift({ ...data, date: formatDate(data.date) });
+          availableDescriptions.add(data.description);
         })
         .finally(() => {
           state.busy = false;
@@ -188,11 +186,12 @@ export default {
     const deleteExpense = (index) => {
       if (!confirm('Are you sure?')) return;
 
-      const { id } = state.expenseItems[index];
+      const { id, description } = state.expenseItems[index];
 
       axios.delete(`/api/expenses/${id}`)
         .then(() => {
           state.expenseItems.splice(index, 1);
+          availableDescriptions.remove(description);
         });
     };
 
