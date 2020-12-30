@@ -44,8 +44,6 @@ config :logger,
   utc_log: true,
   truncate: :infinity
 
-pool_size = "ET_DB_POOL_SIZE" |> System.get_env |> String.to_integer
-
 config :expense_tracker, ExpenseTracker.Repo,
   truncate_read_tables_query: """
     TRUNCATE TABLE
@@ -60,7 +58,7 @@ config :expense_tracker, ExpenseTracker.Repo,
   password: {:system, "ET_DB_PASS"},
   database: {:system, "ET_READ_DB"},
   hostname: {:system, "ET_DB_HOST"},
-  pool_size: pool_size,
+  pool_size: {:system, :integer, "ET_DB_POOL_SIZE"},
   charset: "utf8mb4",
   collation: "utf8mb4_unicode_ci"
 
@@ -70,7 +68,7 @@ config :expense_tracker, ExpenseTracker.EventStore,
   password: {:system, "ET_DB_PASS"},
   database: {:system, "ET_EVENT_DB"},
   hostname: {:system, "ET_DB_HOST"},
-  pool_size: pool_size,
+  pool_size: {:system, :integer, "ET_DB_POOL_SIZE"},
   charset: "utf8mb4",
   collation: "utf8mb4_unicode_ci"
 
