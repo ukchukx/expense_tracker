@@ -31,7 +31,7 @@ defmodule ExpenseTracker.Application do
         ExpenseTracker.TelemetryReporter.setup()
 
         if Application.get_env(:expense_tracker, :env) != :test do
-          ExpenseTracker.Support.Migrate.run()
+          ExpenseTracker.Support.SetupDatabase.run()
         end
 
         res
