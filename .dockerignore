@@ -1,0 +1,4 @@
+/deps
+/.elixir_ls
+/_build
+/test
