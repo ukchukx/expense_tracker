@@ -14,7 +14,7 @@ blocks:
             - if [ "$SEMAPHORE_GIT_BRANCH" != "master" ]; then false; fi
             - echo 'Master branch received'
 
-  - name: Build Docker image
+  - name: Compile and build plts
     task:
       env_vars:
         - name: MIX_ENV
