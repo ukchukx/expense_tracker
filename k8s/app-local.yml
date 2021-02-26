@@ -15,9 +15,11 @@ spec:
       labels:
         app: expense-tracker
     spec:
+      imagePullSecrets:
+      - name: headless-commerce-package-access-token
       containers:
       - name: expense-tracker
-        image: localhost:32000/expense_tracker
+        image: ghcr.io/headless-commerce/expense_tracker
         imagePullPolicy: Always
         ports:
         - containerPort: 4000

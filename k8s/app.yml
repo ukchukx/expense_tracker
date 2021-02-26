@@ -15,13 +15,15 @@ spec:
       labels:
         app: expense-tracker
     spec:
+      imagePullSecrets:
+      - name: headless-commerce-package-access-token
       initContainers:
       - name: check-db-ready
         image: postgres:11.5
         command: ['sh', '-c', 'until pg_isready -h expense-tracker-db -p 5432; do echo waiting for database; sleep 2; done;']
       containers:
       - name: expense-tracker
-        image: localhost:32000/expense_tracker
+        image: ghcr.io/headless-commerce/expense_tracker
         imagePullPolicy: Always
         ports:
         - containerPort: 4000
