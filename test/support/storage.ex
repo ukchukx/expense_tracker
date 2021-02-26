@@ -1,5 +1,6 @@
 defmodule ExpenseTracker.Storage do
   alias ExpenseTracker.Repo
+
   @doc """
   Clear the event store and read store databases
   """
@@ -13,18 +14,18 @@ defmodule ExpenseTracker.Storage do
   end
 
   defp reset_event_store do
-    ExpenseTracker.EventStore.config
-    |> EventStore.Config.parse
-    |> EventStore.Config.default_postgrex_opts
-    |> Postgrex.start_link
+    ExpenseTracker.EventStore.config()
+    |> EventStore.Config.parse()
+    |> EventStore.Config.default_postgrex_opts()
+    |> Postgrex.start_link()
     |> elem(1)
-    |> EventStore.Storage.Initializer.reset!
+    |> EventStore.Storage.Initializer.reset!()
   end
 
   defp reset_read_store do
     :expense_tracker
     |> Application.get_env(Repo)
-    |> Postgrex.start_link
+    |> Postgrex.start_link()
     |> elem(1)
     |> Postgrex.query!(truncate_read_tables_query(), [])
   end

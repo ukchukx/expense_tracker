@@ -15,7 +15,6 @@ defmodule ExpenseTracker.Commands.CreateUser do
   def hash_password(%__MODULE__{password: password} = command) do
     %__MODULE__{command | password: nil, hashed_password: Auth.hash_password(password)}
   end
-
 end
 
 defimpl ExpenseTracker.Protocol.UniqueFields, for: ExpenseTracker.Commands.CreateUser do
@@ -36,10 +35,9 @@ defimpl ExpenseTracker.Protocol.UniqueFields, for: ExpenseTracker.Commands.Creat
   defp validate_email(email, user_id) do
     case Email.user_email_taken?(email, user_id) do
       false -> :ok
-      true  -> {:email, "has been taken"}
+      true -> {:email, "has been taken"}
     end
   end
-
 end
 
 defimpl ExpenseTracker.Protocol.ValidCommand, for: ExpenseTracker.Commands.CreateUser do
@@ -56,7 +54,7 @@ defimpl ExpenseTracker.Protocol.ValidCommand, for: ExpenseTracker.Commands.Creat
     |> Kernel.++(validate_email(email))
     |> Kernel.++(validate_active(command.active))
     |> case do
-      []       -> :ok
+      [] -> :ok
       err_list -> {:error, err_list}
     end
   end
@@ -67,7 +65,7 @@ defimpl ExpenseTracker.Protocol.ValidCommand, for: ExpenseTracker.Commands.Creat
 
   defp validate_user_id(user_id) do
     case Uuid.validate(user_id) do
-      :ok           -> []
+      :ok -> []
       {:error, err} -> [{:user_id, err}]
     end
   end
@@ -76,7 +74,7 @@ defimpl ExpenseTracker.Protocol.ValidCommand, for: ExpenseTracker.Commands.Creat
 
   defp validate_hashed_password(hashed_password) do
     case StringValidator.validate(hashed_password) do
-      :ok           -> []
+      :ok -> []
       {:error, err} -> [{:hashed_password, err}]
     end
   end
@@ -87,7 +85,7 @@ defimpl ExpenseTracker.Protocol.ValidCommand, for: ExpenseTracker.Commands.Creat
 
   defp validate_email(email) do
     case Email.validate(email) do
-      :ok           -> []
+      :ok -> []
       {:error, err} -> [{:email, err}]
     end
   end

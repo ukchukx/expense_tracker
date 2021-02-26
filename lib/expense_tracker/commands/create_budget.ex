@@ -9,13 +9,18 @@ defmodule ExpenseTracker.Commands.CreateBudget do
     line_items =
       case Enum.any?(line_items, &(&1.description == @unbudgeted_description)) do
         false ->
-          List.insert_at(line_items, -1, %{amount: 0, description: @unbudgeted_description, id: Ecto.UUID.generate()})
-        true -> line_items
+          List.insert_at(line_items, -1, %{
+            amount: 0,
+            description: @unbudgeted_description,
+            id: Ecto.UUID.generate()
+          })
+
+        true ->
+          line_items
       end
 
     %{command | line_items: line_items}
   end
-
 end
 
 defimpl ExpenseTracker.Protocol.ValidCommand, for: ExpenseTracker.Commands.CreateBudget do
@@ -30,21 +35,21 @@ defimpl ExpenseTracker.Protocol.ValidCommand, for: ExpenseTracker.Commands.Creat
     |> Kernel.++(validate_line_items(command.line_items))
     |> Kernel.++(validate_name(command.name))
     |> case do
-      []       -> :ok
+      [] -> :ok
       err_list -> {:error, err_list}
     end
   end
 
   defp validate_user_id(user_id) do
     case Uuid.validate(user_id) do
-      :ok           -> []
+      :ok -> []
       {:error, err} -> [{:user_id, err}]
     end
   end
 
   defp validate_budget_id(budget_id) do
     case Uuid.validate(budget_id) do
-      :ok           -> []
+      :ok -> []
       {:error, err} -> [{:budget_id, err}]
     end
   end
@@ -55,7 +60,7 @@ defimpl ExpenseTracker.Protocol.ValidCommand, for: ExpenseTracker.Commands.Creat
 
   defp validate_line_items(line_items) do
     case LineItemsValidator.validate(line_items) do
-      :ok           -> []
+      :ok -> []
       {:error, err} -> [{:line_items, err}]
     end
   end
@@ -66,7 +71,7 @@ defimpl ExpenseTracker.Protocol.ValidCommand, for: ExpenseTracker.Commands.Creat
 
   defp validate_name(name) do
     case StringValidator.validate(name) do
-      :ok           -> []
+      :ok -> []
       {:error, err} -> [{:name, err}]
     end
   end
@@ -78,5 +83,4 @@ defimpl ExpenseTracker.Protocol.ValidCommand, for: ExpenseTracker.Commands.Creat
   defp validate_end_date(%Date{}), do: []
 
   defp validate_end_date(_), do: [{:end_date, "is not a date"}]
-
 end

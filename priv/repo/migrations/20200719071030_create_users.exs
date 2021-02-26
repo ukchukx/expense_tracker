@@ -10,6 +10,7 @@ defmodule ExpenseTracker.Repo.Migrations.CreateUsers do
 
       timestamps(type: :utc_datetime)
     end
+
     create index(:users, [:email])
   end
 end

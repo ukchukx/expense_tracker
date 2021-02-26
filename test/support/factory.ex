@@ -37,7 +37,7 @@ defmodule ExpenseTracker.Factory do
       line_item_id: Ecto.UUID.generate(),
       description: Faker.Lorem.sentence(1..2),
       amount: 10_000,
-      date: 4 |> Faker.Date.backward() |> Date.to_string
+      date: 4 |> Faker.Date.backward() |> Date.to_string()
     }
   end
 
@@ -47,7 +47,7 @@ defmodule ExpenseTracker.Factory do
     params =
       :create_user_command
       |> build(attrs)
-      |> Utils.to_map
+      |> Utils.to_map()
       |> Map.drop([:user_id])
       |> Map.put(:id, Ecto.UUID.generate())
 
@@ -56,14 +56,14 @@ defmodule ExpenseTracker.Factory do
 
   def build_user_params(attrs \\ []), do: build(:user, attrs)
 
-
-  def create_budget_command_factory(attrs \\ []), do: struct(CreateBudget, build_budget_params(attrs))
+  def create_budget_command_factory(attrs \\ []),
+    do: struct(CreateBudget, build_budget_params(attrs))
 
   def budget_aggregate_factory(attrs \\ []) do
     params =
       :create_budget_command
       |> build(attrs)
-      |> Utils.to_map
+      |> Utils.to_map()
       |> Map.drop([:budget_id])
       |> Map.put(:id, Ecto.UUID.generate())
 
@@ -72,14 +72,14 @@ defmodule ExpenseTracker.Factory do
 
   def build_budget_params(attrs \\ []), do: build(:budget, attrs)
 
-
-  def create_expense_item_command_factory(attrs \\ []), do: struct(CreateExpenseItem, build_expense_item_params(attrs))
+  def create_expense_item_command_factory(attrs \\ []),
+    do: struct(CreateExpenseItem, build_expense_item_params(attrs))
 
   def expense_item_aggregate_factory(attrs \\ []) do
     params =
       :create_expense_item_command
       |> build(attrs)
-      |> Utils.to_map
+      |> Utils.to_map()
       |> Map.drop([:expense_item_id])
       |> Map.put(:id, Ecto.UUID.generate())
 

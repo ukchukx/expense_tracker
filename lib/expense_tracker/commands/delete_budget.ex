@@ -6,9 +6,9 @@ defmodule ExpenseTracker.Commands.DeleteBudget do
 
     def validate(%{budget_id: budget_id} = _command) do
       budget_id
-      |> Uuid.validate
+      |> Uuid.validate()
       |> case do
-        :ok           -> :ok
+        :ok -> :ok
         {:error, err} -> [{:budget_id, err}]
       end
     end

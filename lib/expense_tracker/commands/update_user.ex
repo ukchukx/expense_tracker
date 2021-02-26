@@ -10,7 +10,7 @@ defmodule ExpenseTracker.Commands.UpdateUser do
   def downcase_email(%__MODULE__{email: email} = command) do
     case is_binary(email) do
       false -> command
-      true ->  %__MODULE__{command | email: String.downcase(email)}
+      true -> %__MODULE__{command | email: String.downcase(email)}
     end
   end
 
@@ -19,10 +19,7 @@ defmodule ExpenseTracker.Commands.UpdateUser do
   def hash_password(%__MODULE__{password: nil} = command), do: command
 
   def hash_password(%__MODULE__{password: password} = command) do
-    %__MODULE__{command |
-      password: nil,
-      hashed_password: Auth.hash_password(password),
-    }
+    %__MODULE__{command | password: nil, hashed_password: Auth.hash_password(password)}
   end
 end
 
@@ -41,7 +38,7 @@ defimpl ExpenseTracker.Protocol.UniqueFields, for: ExpenseTracker.Commands.Updat
   defp validate_email(email, user_id) do
     case Email.user_email_taken?(email, user_id) do
       false -> :ok
-      true  -> {:email, "has been taken"}
+      true -> {:email, "has been taken"}
     end
   end
 end
@@ -55,14 +52,14 @@ defimpl ExpenseTracker.Protocol.ValidCommand, for: ExpenseTracker.Commands.Updat
     |> Kernel.++(validate_hashed_password(command.hashed_password))
     |> Kernel.++(validate_email(command.email))
     |> case do
-      []       -> :ok
+      [] -> :ok
       err_list -> {:error, err_list}
     end
   end
 
   defp validate_user_id(user_id) do
     case Uuid.validate(user_id) do
-      :ok           -> []
+      :ok -> []
       {:error, err} -> [{:user_id, err}]
     end
   end
@@ -73,7 +70,7 @@ defimpl ExpenseTracker.Protocol.ValidCommand, for: ExpenseTracker.Commands.Updat
 
   defp validate_email(email) do
     case Email.validate(email) do
-      :ok           -> []
+      :ok -> []
       {:error, err} -> [{:email, err}]
     end
   end
@@ -84,7 +81,7 @@ defimpl ExpenseTracker.Protocol.ValidCommand, for: ExpenseTracker.Commands.Updat
 
   defp validate_hashed_password(hashed_password) do
     case StringValidator.validate(hashed_password) do
-      :ok           -> []
+      :ok -> []
       {:error, err} -> [{:hashed_password, err}]
     end
   end

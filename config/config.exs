@@ -7,13 +7,11 @@
 # General application configuration
 use Mix.Config
 
-config :expense_tracker, :router,
-  timeout: 10_000
+config :expense_tracker, :router, timeout: 10_000
 
 config :expense_tracker,
   ecto_repos: [ExpenseTracker.Repo],
   event_stores: [ExpenseTracker.EventStore]
-
 
 config :commanded_ecto_projections, repo: ExpenseTracker.Repo
 
@@ -46,13 +44,13 @@ config :logger,
 
 config :expense_tracker, ExpenseTracker.Repo,
   truncate_read_tables_query: """
-    TRUNCATE TABLE
-      users,
-      budgets,
-      expense_items,
-      projection_versions
-    RESTART IDENTITY;
-    """,
+  TRUNCATE TABLE
+    users,
+    budgets,
+    expense_items,
+    projection_versions
+  RESTART IDENTITY;
+  """,
   migration_timestamps: [type: :utc_datetime_usec],
   username: {:system, "ET_DB_USER"},
   password: {:system, "ET_DB_PASS"},

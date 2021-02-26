@@ -1,5 +1,12 @@
 defmodule ExpenseTracker.Aggregates.UserTest do
-  alias ExpenseTracker.Events.{UserCreated, UserDisabled, UserEnabled, UserEmailChanged, UserPasswordChanged}
+  alias ExpenseTracker.Events.{
+    UserCreated,
+    UserDisabled,
+    UserEnabled,
+    UserEmailChanged,
+    UserPasswordChanged
+  }
+
   alias ExpenseTracker.Commands.{DisableUser, EnableUser, UpdateUser}
   alias ExpenseTracker.Support.Utils
   alias ExpenseTracker.Aggregates.User

@@ -6,7 +6,7 @@ defmodule ExpenseTracker.Validators.Email do
   def validate(email) when is_binary(email) do
     case String.match?(email, @email_regex) do
       false -> {:error, "is not an email address"}
-      true  -> :ok
+      true -> :ok
     end
   end
 
@@ -17,8 +17,7 @@ defmodule ExpenseTracker.Validators.Email do
       false
     else
       {:error, :not_found} -> false
-      {:ok, _}             -> true
+      {:ok, _} -> true
     end
   end
-
 end

@@ -9,19 +9,19 @@ defmodule ExpenseTracker.Projectors.Budget do
   alias ExpenseTracker.Queries.ById
   alias ExpenseTracker.Support.Utils
 
-  project %BudgetCreated{budget_id: id, start_date: s, end_date: e} = event, fn multi ->
+  project(%BudgetCreated{budget_id: id, start_date: s, end_date: e} = event, fn multi ->
     changes =
       event
-      |> Utils.to_map
+      |> Utils.to_map()
       |> Map.drop([:budget_id])
       |> Map.put(:id, id)
       |> Map.put(:start_date, Date.from_iso8601!(s))
       |> Map.put(:end_date, Date.from_iso8601!(e))
 
     Ecto.Multi.insert(multi, :budget, struct(Budget, changes))
-  end
+  end)
 
-  project %BudgetDeleted{budget_id: id}, fn multi ->
+  project(%BudgetDeleted{budget_id: id}, fn multi ->
     Ecto.Multi.delete_all(multi, :budget, ById.one(Budget, id))
-  end
+  end)
 end

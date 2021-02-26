@@ -12,7 +12,6 @@ defmodule ExpenseTracker.Middleware.Telemetry do
 
   @behaviour Commanded.Middleware
 
-
   def before_dispatch(%Pipeline{command: command, metadata: metadata} = pipeline) do
     :telemetry.execute(
       [:commanded, :command, :dispatch, :start],

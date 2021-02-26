@@ -11,6 +11,7 @@ defmodule ExpenseTracker.Web.ErrorViewTest do
   end
 
   test "renders 500.html" do
-    assert render_to_string(ExpenseTracker.Web.ErrorView, "500.html", []) == "Internal Server Error"
+    assert render_to_string(ExpenseTracker.Web.ErrorView, "500.html", []) ==
+             "Internal Server Error"
   end
 end

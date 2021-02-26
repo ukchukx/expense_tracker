@@ -8,8 +8,11 @@ defmodule ExpenseTracker.Middleware.Validate do
 
   def before_dispatch(%{command: command} = pipeline) do
     case ValidCommand.validate(command) do
-      :ok -> pipeline
-      {:error, errors} -> pipeline |> respond({:error, :validation_failure, merge_errors(errors)}) |> halt
+      :ok ->
+        pipeline
+
+      {:error, errors} ->
+        pipeline |> respond({:error, :validation_failure, merge_errors(errors)}) |> halt
     end
   end
 
@@ -23,7 +26,6 @@ defmodule ExpenseTracker.Middleware.Validate do
       fn {field, _message} -> field end,
       fn {_field, message} -> message end
     )
-    |> Map.new
+    |> Map.new()
   end
-
 end

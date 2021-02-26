@@ -5,8 +5,11 @@ defmodule ExpenseTracker.Web.Support.Auth do
     case ExpenseTracker.Accounts.user_by_email(email) do
       {:ok, %{active: true} = user} ->
         cond do
-          ExpenseTracker.Support.Auth.validate_password(pass, user.password) -> {:ok, set_session(conn, user)}
-          user -> {:error, :unauthorized, conn}
+          ExpenseTracker.Support.Auth.validate_password(pass, user.password) ->
+            {:ok, set_session(conn, user)}
+
+          user ->
+            {:error, :unauthorized, conn}
         end
 
       _ ->

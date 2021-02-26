@@ -34,5 +34,4 @@ defmodule ExpenseTracker.DataCase do
   setup do
     ExpenseTracker.Storage.reset!()
   end
-
 end

@@ -26,6 +26,7 @@ defmodule ExpenseTracker.Application do
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
     opts = [strategy: :one_for_one, name: ExpenseTracker.Supervisor]
+
     case Supervisor.start_link(children, opts) do
       {:ok, _} = res ->
         ExpenseTracker.TelemetryReporter.setup()
@@ -35,7 +36,9 @@ defmodule ExpenseTracker.Application do
         end
 
         res
-      err_res -> err_res
+
+      err_res ->
+        err_res
     end
   end
 

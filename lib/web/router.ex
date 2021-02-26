@@ -16,7 +16,7 @@ defmodule ExpenseTracker.Web.Router do
     plug :accepts, ["json"]
   end
 
-  pipeline :auth, do: plug ExpenseTracker.Web.Plugs.LoadCurrentUser
+  pipeline :auth, do: plug(ExpenseTracker.Web.Plugs.LoadCurrentUser)
 
   # Other scopes may use custom stacks.
   scope "/api", ExpenseTracker.Web do

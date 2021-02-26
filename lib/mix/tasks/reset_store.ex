@@ -9,7 +9,7 @@ defmodule Mix.Tasks.ResetStore do
 
   def run(args), do: reset_read_models!(args)
 
-  def reset_event_store, do: event_store_conn() |> EventStore.Storage.Initializer.reset!
+  def reset_event_store, do: event_store_conn() |> EventStore.Storage.Initializer.reset!()
 
   defp reset_read_models!(args) do
     [:postgrex, :ecto] |> Enum.each(&Application.ensure_all_started/1)
@@ -31,7 +31,7 @@ defmodule Mix.Tasks.ResetStore do
   defp reset_read_store do
     :expense_tracker
     |> Application.get_env(Repo)
-    |> Postgrex.start_link
+    |> Postgrex.start_link()
     |> elem(1)
     |> Postgrex.query(truncate_read_tables_query(), [])
   end
@@ -41,14 +41,16 @@ defmodule Mix.Tasks.ResetStore do
   end
 
   defp reset_subscription_table do
-    Postgrex.query(event_store_conn(), truncate_subscription_table_query(), [], pool: DBConnection.Poolboy)
+    Postgrex.query(event_store_conn(), truncate_subscription_table_query(), [],
+      pool: DBConnection.Poolboy
+    )
   end
 
   defp event_store_conn do
-    ExpenseTracker.EventStore.config
-    |> EventStore.Config.parse
-    |> EventStore.Config.default_postgrex_opts
-    |> Postgrex.start_link
+    ExpenseTracker.EventStore.config()
+    |> EventStore.Config.parse()
+    |> EventStore.Config.default_postgrex_opts()
+    |> Postgrex.start_link()
     |> elem(1)
   end
 

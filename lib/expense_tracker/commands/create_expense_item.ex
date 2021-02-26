@@ -2,7 +2,6 @@ defmodule ExpenseTracker.Commands.CreateExpenseItem do
   defstruct [:expense_item_id, :budget_id, :line_item_id, :description, :amount, :date]
 
   def assign_id(%__MODULE__{} = command, id), do: %__MODULE__{command | expense_item_id: id}
-
 end
 
 defimpl ExpenseTracker.Protocol.ValidCommand, for: ExpenseTracker.Commands.CreateExpenseItem do
@@ -17,28 +16,28 @@ defimpl ExpenseTracker.Protocol.ValidCommand, for: ExpenseTracker.Commands.Creat
     |> Kernel.++(validate_description(command.description))
     |> Kernel.++(validate_date(command.date))
     |> case do
-      []       -> :ok
+      [] -> :ok
       err_list -> {:error, err_list}
     end
   end
 
   defp validate_expense_item_id(expense_item_id) do
     case Uuid.validate(expense_item_id) do
-      :ok           -> []
+      :ok -> []
       {:error, err} -> [{:expense_item_id, err}]
     end
   end
 
   defp validate_budget_id(budget_id) do
     case Uuid.validate(budget_id) do
-      :ok           -> []
+      :ok -> []
       {:error, err} -> [{:budget_id, err}]
     end
   end
 
   defp validate_line_item_id(line_item_id) do
     case Uuid.validate(line_item_id) do
-      :ok           -> []
+      :ok -> []
       {:error, err} -> [{:line_item_id, err}]
     end
   end
@@ -49,7 +48,7 @@ defimpl ExpenseTracker.Protocol.ValidCommand, for: ExpenseTracker.Commands.Creat
 
   defp validate_description(description) do
     case StringValidator.validate(description) do
-      :ok           -> []
+      :ok -> []
       {:error, err} -> [{:description, err}]
     end
   end
@@ -69,5 +68,4 @@ defimpl ExpenseTracker.Protocol.ValidCommand, for: ExpenseTracker.Commands.Creat
       _ -> [{:date, "is not a valid date"}]
     end
   end
-
 end
