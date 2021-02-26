@@ -16,6 +16,9 @@ blocks:
 
   - name: Build Docker image
     task:
+      env_vars:
+        - name: MIX_ENV
+          value: "test"
       secrets:
         - name: expense-tracker-env-vars
       prologue:
@@ -28,12 +31,15 @@ blocks:
           commands:
             - cache restore
             - cache restore dialyzer-plt
-            - MIX_ENV=test mix do deps.get, compile, dialyzer --plt
+            - mix do deps.get, compile, dialyzer --plt
             - cache store
             - cache store et-dialyzer-plt priv/plts/
 
   - name: Analyze
     task:
+      env_vars:
+        - name: MIX_ENV
+          value: "test"
       prologue:
         commands:
           - checkout
@@ -47,13 +53,16 @@ blocks:
             - mix credo --strict
         - name: dialyzer
           commands:
-            - mix dialyzer --halt-exit-status --no-compile
+            - mix dialyzer --no-compile
         - name: formatter
           commands:
             - mix format --check-formatted
 
   - name: Test
     task:
+      env_vars:
+        - name: MIX_ENV
+          value: "test"
       secrets:
         - name: expense-tracker-env-vars
       prologue:
