@@ -26,6 +26,8 @@ blocks:
           - checkout
           - kiex install 1.11
           - sem-version elixir 1.11
+          - mix local.hex --force
+          - mix local.rebar --force
       jobs:
         - name: Compile and build plts
           commands:
@@ -45,8 +47,10 @@ blocks:
           - checkout
           - kiex install 1.11
           - sem-version elixir 1.11
+          - mix local.hex --force
+          - mix local.rebar --force
           - cache restore
-          - cache restore dialyzer-plt
+          - cache restore et-dialyzer-plt
       jobs:
         - name: credo
           commands:
@@ -70,6 +74,8 @@ blocks:
           - checkout
           - kiex install 1.11
           - sem-version elixir 1.11
+          - mix local.hex --force
+          - mix local.rebar --force
           - cache restore
           - sem-service start postgres 11 --username=$ET_DB_USER --password=$ET_DB_PASS --db=$ET_TEST_EVENT_DB
           - createdb -U postgres -h 0.0.0.0 $ET_TEST_READ_DB
