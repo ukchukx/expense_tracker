@@ -1,0 +1,71 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: expense-tracker-init-sql
+  namespace: expense-tracker
+data:
+  createdb.sql: |
+    CREATE DATABASE reads ENCODING UTF8;
+    GRANT ALL PRIVILEGES ON DATABASE reads TO expense_tracker;
+    GRANT ALL PRIVILEGES ON DATABASE events TO expense_tracker;
+    ALTER USER expense_tracker WITH SUPERUSER;
+    ALTER USER expense_tracker PASSWORD '';
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: expense-tracker-db
+  namespace: expense-tracker
+  labels:
+    app: expense-tracker-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: expense-tracker-db
+  template:
+    metadata:
+      labels:
+        app: expense-tracker-db
+    spec:
+      containers:
+      - name: expense-tracker-db
+        image: postgres:11.5
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 5432
+        volumeMounts:
+        - name: init-sql
+          mountPath: /docker-entrypoint-initdb.d/createdb.sql
+          subPath: createdb.sql
+          readOnly: true
+        - name: expense-tracker-data
+          mountPath: /var/lib/prostgresql/data
+        env:
+        - name: POSTGRES_DB
+          value: 'events'
+        - name: POSTGRES_USER
+          value: 'expense_tracker'
+        - name: POSTGRES_PASSWORD
+          value: ''
+      volumes:
+      - name: expense-tracker-data
+        hostPath:
+          path: /var/microk8s/data/expense_tracker/data
+          type: DirectoryOrCreate
+      - name: init-sql
+        configMap:
+          name: expense-tracker-init-sql
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: expense-tracker-db
+  namespace: expense-tracker
+spec:
+  ports:
+  - name: postgresql
+    port: 5432
+  selector:
+    app: expense-tracker-db
