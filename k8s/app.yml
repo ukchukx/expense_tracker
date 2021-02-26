@@ -93,9 +93,9 @@ spec:
     services:
     - name: expense-tracker
       port: 80
-    # middlewares:
-    # - name: security
-    #   namespace: default
+    middlewares:
+    - name: security
+      namespace: default
 ---
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
@@ -111,15 +111,15 @@ spec:
     services:
     - name: expense-tracker
       port: 80
-    # middlewares:
-    # - name: security
-    #   namespace: default
-  # tls:
-  #   certResolver: le
-  #   domains:
-  #   - main: "moview.com.ng"
-  #     sans:
-  #     - "*.moview.com.ng"
-  #   options:
-  #     name: mytlsoption
-  #     namespace: default
+    middlewares:
+    - name: security
+      namespace: default
+  tls:
+    certResolver: le
+    domains:
+    - main: "moview.com.ng"
+      sans:
+      - "*.moview.com.ng"
+    options:
+      name: mytlsoption
+      namespace: default
