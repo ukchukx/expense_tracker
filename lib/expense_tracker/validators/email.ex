@@ -1,4 +1,6 @@
 defmodule ExpenseTracker.Validators.Email do
+  @moduledoc false
+
   alias ExpenseTracker.Accounts
 
   @email_regex ~r/\S+@\S+\.\S+/
@@ -13,9 +15,8 @@ defmodule ExpenseTracker.Validators.Email do
   def validate(_), do: {:error, "is not a string"}
 
   def user_email_taken?(email, user_id) do
-    with {:ok, %{user_id: ^user_id}} <- Accounts.user_by_email(email) do
-      false
-    else
+    case Accounts.user_by_email(email) do
+      {:ok, %{user_id: ^user_id}} -> false
       {:error, :not_found} -> false
       {:ok, _} -> true
     end

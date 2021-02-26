@@ -1,4 +1,6 @@
 defmodule ExpenseTracker.Commands do
+  @moduledoc false
+
   alias ExpenseTracker.CommandedApp
 
   def dispatch(command, opts \\ []) do

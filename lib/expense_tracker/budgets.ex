@@ -1,7 +1,9 @@
 defmodule ExpenseTracker.Budgets do
-  alias ExpenseTracker.Commands.{CreateBudget, DeleteBudget, CreateExpenseItem, DeleteExpenseItem}
-  alias ExpenseTracker.Queries.{ById, Budgets, ExpenseItems}
+  @moduledoc false
+
   alias ExpenseTracker.{Commands, Queries}
+  alias ExpenseTracker.Commands.{CreateBudget, CreateExpenseItem, DeleteBudget, DeleteExpenseItem}
+  alias ExpenseTracker.Queries.{Budgets, ById, ExpenseItems}
   alias ExpenseTracker.Projections.{Budget, ExpenseItem}
   alias ExpenseTracker.Support.Utils
 
@@ -47,8 +49,9 @@ defmodule ExpenseTracker.Budgets do
   end
 
   def create_budget(%{start_date: d} = attrs, %{user: %{id: user_id}} = context) do
-    with budget_name = Utils.budget_name(d),
-         {:error, :not_found} <- by_name_and_user(budget_name, user_id),
+    budget_name = Utils.budget_name(d)
+
+    with {:error, :not_found} <- by_name_and_user(budget_name, user_id),
          {:ok, %{id: id}} <- attrs |> build_create_budget_command(context) |> Commands.dispatch() do
       budget_by_id(id)
     else
@@ -117,7 +120,7 @@ defmodule ExpenseTracker.Budgets do
     Enum.map(budgets, &calculate_line_item_expensed_values_for_budget/1)
   end
 
-  def calculate_line_item_expensed_values_for_budget(budget = %{line_items: items}) do
+  def calculate_line_item_expensed_values_for_budget(%{line_items: items} = budget) do
     expense_items_for_budget =
       items
       |> Enum.map(& &1["id"])

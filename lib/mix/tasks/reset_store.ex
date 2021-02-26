@@ -1,22 +1,28 @@
 defmodule Mix.Tasks.ResetStore do
+  @moduledoc "Reset read & event stores"
+  @dialyzer {:nowarn_function, reset_subscription_table: 0}
+
+  alias EventStore.Storage.Initializer
   alias ExpenseTracker.Repo
 
   require Logger
 
   use Mix.Task
 
-  @shortdoc "Reset read & event stores"
-
   def run(args), do: reset_read_models!(args)
 
-  def reset_event_store, do: event_store_conn() |> EventStore.Storage.Initializer.reset!()
+  def reset_event_store, do: Initializer.reset(event_store_conn())
 
   defp reset_read_models!(args) do
-    [:postgrex, :ecto] |> Enum.each(&Application.ensure_all_started/1)
+    Enum.each([:postgrex, :ecto], &Application.ensure_all_started/1)
     Repo.start_link()
 
     Logger.info("Resetting subscriptions table...")
-    reset_subscription_table()
+    try do
+      reset_subscription_table()
+    rescue
+      _ -> :ok
+    end
 
     if "everything" in args do
       Logger.info("Resetting event tables...")
@@ -32,8 +38,10 @@ defmodule Mix.Tasks.ResetStore do
     :expense_tracker
     |> Application.get_env(Repo)
     |> Postgrex.start_link()
-    |> elem(1)
-    |> Postgrex.query(truncate_read_tables_query(), [])
+    |> case do
+      {:ok, pid} -> Postgrex.query(pid, truncate_read_tables_query(), [])
+      err -> err
+    end
   end
 
   defp truncate_read_tables_query do
@@ -41,7 +49,10 @@ defmodule Mix.Tasks.ResetStore do
   end
 
   defp reset_subscription_table do
-    Postgrex.query(event_store_conn(), truncate_subscription_table_query(), [],
+    Postgrex.query(
+      event_store_conn(),
+      "TRUNCATE TABLE subscriptions RESTART IDENTITY;",
+      [],
       pool: DBConnection.Poolboy
     )
   end
@@ -53,6 +64,4 @@ defmodule Mix.Tasks.ResetStore do
     |> Postgrex.start_link()
     |> elem(1)
   end
-
-  defp truncate_subscription_table_query, do: "TRUNCATE TABLE subscriptions RESTART IDENTITY;"
 end

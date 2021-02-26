@@ -1,17 +1,18 @@
 defmodule ExpenseTracker.Router do
-  alias ExpenseTracker.Middleware.{Telemetry, Uniqueness, Validate}
   alias ExpenseTracker.Aggregates.{Budget, ExpenseItem, User}
 
   alias ExpenseTracker.Commands.{
+    CreateBudget,
+    CreateExpenseItem,
     CreateUser,
+    DeleteBudget,
+    DeleteExpenseItem,
     DisableUser,
     EnableUser,
-    UpdateUser,
-    CreateBudget,
-    DeleteBudget,
-    CreateExpenseItem,
-    DeleteExpenseItem
+    UpdateUser
   }
+
+  alias ExpenseTracker.Middleware.{Telemetry, Uniqueness, Validate}
 
   use Commanded.Commands.Router
 

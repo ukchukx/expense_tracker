@@ -1,4 +1,6 @@
 defmodule ExpenseTracker.Queries.Budgets do
+  @moduledoc false
+
   alias ExpenseTracker.Projections.Budget
 
   import Ecto.Query

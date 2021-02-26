@@ -1,5 +1,7 @@
 defmodule ExpenseTracker.CommandedSupervisor do
-  alias ExpenseTracker.{Projectors, EventHandlers}
+  @moduledoc false
+
+  alias ExpenseTracker.{EventHandlers, Projectors}
 
   use Supervisor
 

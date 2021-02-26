@@ -1,4 +1,6 @@
 defmodule ExpenseTracker.Commands.CreateExpenseItem do
+  @moduledoc false
+
   defstruct [:expense_item_id, :budget_id, :line_item_id, :description, :amount, :date]
 
   def assign_id(%__MODULE__{} = command, id), do: %__MODULE__{command | expense_item_id: id}
@@ -62,9 +64,8 @@ defimpl ExpenseTracker.Protocol.ValidCommand, for: ExpenseTracker.Commands.Creat
   defp validate_date(""), do: [{:date, "cannot be empty"}]
 
   defp validate_date(date) do
-    with {:ok, _valid_date} <- Date.from_iso8601(date) do
-      []
-    else
+    case Date.from_iso8601(date) do
+      {:ok, _valid_date} -> []
       _ -> [{:date, "is not a valid date"}]
     end
   end

@@ -1,4 +1,6 @@
 defmodule ExpenseTracker.Queries.ById do
+  @moduledoc false
+
   import Ecto.Query
 
   def one(projection, id), do: from(p in projection, where: p.id == ^id)

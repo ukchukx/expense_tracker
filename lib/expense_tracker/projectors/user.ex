@@ -1,15 +1,17 @@
 defmodule ExpenseTracker.Projectors.User do
+  @moduledoc false
+
   use Commanded.Projections.Ecto,
     name: "Projector.User",
     application: ExpenseTracker.CommandedApp,
     consistency: :strong
 
   alias ExpenseTracker.Events.{
-    UserEmailChanged,
+    UserCreated,
     UserDisabled,
+    UserEmailChanged,
     UserEnabled,
-    UserPasswordChanged,
-    UserCreated
+    UserPasswordChanged
   }
 
   alias ExpenseTracker.Projections.User

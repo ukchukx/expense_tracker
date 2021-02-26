@@ -1,4 +1,6 @@
 defmodule ExpenseTracker.Projectors.Budget do
+  @moduledoc false
+
   use Commanded.Projections.Ecto,
     name: "Projector.Budget",
     application: ExpenseTracker.CommandedApp,

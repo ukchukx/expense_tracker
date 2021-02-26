@@ -1,4 +1,5 @@
 defmodule ExpenseTracker.Web.SessionController do
+  alias ExpenseTracker.Web.Support.Auth
   use ExpenseTracker.Web, :controller
 
   def signin(%{assigns: %{current_user: %{}}} = conn, _),
@@ -23,8 +24,7 @@ defmodule ExpenseTracker.Web.SessionController do
 
   def create_account(conn, %{"email" => email, "password" => pass}) do
     with {:ok, _account} <- ExpenseTracker.Accounts.create_user(%{email: email, password: pass}),
-         {:ok, conn} <-
-           ExpenseTracker.Web.Support.Auth.auth_with_email_and_password(conn, email, pass) do
+         {:ok, conn} <- Auth.auth_with_email_and_password(conn, email, pass) do
       redirect(conn, to: Routes.page_path(conn, :index))
     else
       _ ->
@@ -35,7 +35,7 @@ defmodule ExpenseTracker.Web.SessionController do
   end
 
   def create_session(conn, %{"email" => email, "password" => pass}) do
-    case ExpenseTracker.Web.Support.Auth.auth_with_email_and_password(conn, email, pass) do
+    case Auth.auth_with_email_and_password(conn, email, pass) do
       {:ok, conn} ->
         redirect(conn, to: Routes.page_path(conn, :index))
 

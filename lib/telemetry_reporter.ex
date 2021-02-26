@@ -1,4 +1,6 @@
 defmodule ExpenseTracker.TelemetryReporter do
+  @moduledoc false
+
   require Logger
 
   def setup do

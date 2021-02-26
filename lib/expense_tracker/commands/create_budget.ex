@@ -1,4 +1,6 @@
 defmodule ExpenseTracker.Commands.CreateBudget do
+  @moduledoc false
+
   defstruct [:user_id, :budget_id, :name, :start_date, :end_date, :line_items]
 
   @unbudgeted_description "Unbudgeted"

@@ -35,3 +35,5 @@ npm-debug.log
 /priv/static/
 .env*
 k8s/secrets.yml
+/priv/plts/*.plt
+/priv/plts/*.plt.hash

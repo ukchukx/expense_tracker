@@ -1,4 +1,6 @@
 defmodule ExpenseTracker.Aggregates.ExpenseItem do
+  @moduledoc false
+
   defstruct [:id, :budget_id, :line_item_id, :description, :amount, :date, deleted: false]
 
   alias ExpenseTracker.Commands.{CreateExpenseItem, DeleteExpenseItem}

@@ -1,4 +1,6 @@
 defmodule ExpenseTracker.Commands.DeleteExpenseItem do
+  @moduledoc false
+
   defstruct [:expense_item_id]
 
   defimpl ExpenseTracker.Protocol.ValidCommand do

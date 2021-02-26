@@ -1,4 +1,6 @@
 defmodule ExpenseTracker.Commands.EnableUser do
+  @moduledoc false
+
   defstruct [:user_id]
 end
 

@@ -3,6 +3,8 @@ defmodule ExpenseTracker.Application do
   # for more information on OTP Applications
   @moduledoc false
 
+  alias ExpenseTracker.Support.SetupDatabase
+  alias ExpenseTracker.Web.Endpoint
   use Application
 
   def start(_type, _args) do
@@ -32,7 +34,7 @@ defmodule ExpenseTracker.Application do
         ExpenseTracker.TelemetryReporter.setup()
 
         if Application.get_env(:expense_tracker, :env) != :test do
-          ExpenseTracker.Support.SetupDatabase.run()
+          SetupDatabase.run()
         end
 
         res
@@ -45,7 +47,7 @@ defmodule ExpenseTracker.Application do
   # Tell Phoenix to update the endpoint configuration
   # whenever the application is updated.
   def config_change(changed, _new, removed) do
-    ExpenseTracker.Web.Endpoint.config_change(changed, removed)
+    Endpoint.config_change(changed, removed)
     :ok
   end
 end

@@ -1,4 +1,6 @@
 defmodule ExpenseTracker.Accounts do
+  @moduledoc false
+
   alias ExpenseTracker.Commands.{CreateUser, DisableUser, EnableUser, UpdateUser}
   alias ExpenseTracker.Queries.{ById, Users}
   alias ExpenseTracker.{Commands, Queries}
@@ -34,7 +36,7 @@ defmodule ExpenseTracker.Accounts do
     end
   end
 
-  def update_user(%{id: id} = _user, attrs = %{}) do
+  def update_user(%{id: id} = _user, %{} = attrs) do
     with {:ok, %{} = user} <- user_by_id(id),
          {:ok, %{id: id}} <- user |> build_update_user_command(attrs) |> Commands.dispatch() do
       user_by_id(id)

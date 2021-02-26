@@ -1,19 +1,21 @@
 defmodule ExpenseTracker.Aggregates.User do
+  @moduledoc false
+
   defstruct [:id, :active, :email, :password]
 
   alias ExpenseTracker.Commands.{
+    CreateUser,
     DisableUser,
     EnableUser,
-    CreateUser,
     UpdateUser
   }
 
   alias ExpenseTracker.Events.{
+    UserCreated,
     UserDisabled,
-    UserEnabled,
     UserEmailChanged,
-    UserPasswordChanged,
-    UserCreated
+    UserEnabled,
+    UserPasswordChanged
   }
 
   @behaviour Commanded.Aggregates.AggregateLifespan

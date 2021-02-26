@@ -19,7 +19,7 @@ defmodule ExpenseTracker.Storage do
     |> EventStore.Config.default_postgrex_opts()
     |> Postgrex.start_link()
     |> elem(1)
-    |> EventStore.Storage.Initializer.reset!()
+    |> EventStore.Storage.Initializer.reset()
   end
 
   defp reset_read_store do

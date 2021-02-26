@@ -1,4 +1,6 @@
 defmodule ExpenseTracker.Support.Utils do
+  @moduledoc false
+
   @month_names %{
     1 => "January",
     2 => "February",

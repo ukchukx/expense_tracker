@@ -1,11 +1,14 @@
 defmodule ExpenseTracker.Web.Support.Auth do
+  @moduledoc false
+
+  alias ExpenseTracker.Support.Auth
   import Plug.Conn
 
   def auth_with_email_and_password(conn, email, pass) do
     case ExpenseTracker.Accounts.user_by_email(email) do
       {:ok, %{active: true} = user} ->
         cond do
-          ExpenseTracker.Support.Auth.validate_password(pass, user.password) ->
+          Auth.validate_password(pass, user.password) ->
             {:ok, set_session(conn, user)}
 
           user ->

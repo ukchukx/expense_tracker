@@ -9,9 +9,13 @@ defmodule ExpenseTracker.MixProject do
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
-      build_embedded: Mix.env == :prod,
+      build_embedded: Mix.env() == :prod,
       aliases: aliases(),
-      deps: deps()
+      deps: deps(),
+      dialyzer: [
+        plt_file: {:no_warn, "priv/plts/dialyzer.plt"},
+        plt_add_apps: [:mix]
+      ]
     ]
   end
 
@@ -35,12 +39,14 @@ defmodule ExpenseTracker.MixProject do
   defp deps do
     [
       {:atomize_keys, "~> 1.1"},
-      {:confex, "~> 3.4.0"},
       {:bcrypt_elixir, "~> 2.2"},
+      {:confex, "~> 3.4.0"},
       {:commanded, "~> 1.1"},
       {:commanded_eventstore_adapter, "~> 1.0.0"},
       {:commanded_ecto_projections, "~> 1.0"},
       {:cors_plug, "~> 1.4"},
+      {:credo, "~> 1.5", only: [:dev, :test], runtime: false},
+      {:dialyxir, "~> 1.0", only: [:dev, :test], runtime: false},
       {:ex_machina, "~> 2.3", only: :test},
       {:eventstore, "~> 1.0.0"},
       {:ecto_sql, "~> 3.4"},
@@ -75,7 +81,13 @@ defmodule ExpenseTracker.MixProject do
       "store.init": ["ecto.create", "store.reset", "ecto.migrate"],
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
-      test: ["ecto.drop --quiet", "ecto.create --quiet", "ecto.migrate --quiet", "store.reset", "test"]
+      test: [
+        "ecto.drop --quiet",
+        "ecto.create --quiet",
+        "ecto.migrate --quiet",
+        "store.reset",
+        "test"
+      ]
     ]
   end
 end

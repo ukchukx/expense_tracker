@@ -1,4 +1,6 @@
 defmodule ExpenseTracker.Queries.Users do
+  @moduledoc false
+
   alias ExpenseTracker.Projections.User
 
   import Ecto.Query

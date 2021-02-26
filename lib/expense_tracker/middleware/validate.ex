@@ -1,6 +1,8 @@
 defmodule ExpenseTracker.Middleware.Validate do
-  alias ExpenseTracker.Protocol.ValidCommand
+  @moduledoc false
+
   alias Commanded.Middleware.Pipeline
+  alias ExpenseTracker.Protocol.ValidCommand
 
   import Pipeline
 

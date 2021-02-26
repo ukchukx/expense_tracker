@@ -1,4 +1,6 @@
 defmodule ExpenseTracker.Commands.CreateUser do
+  @moduledoc false
+
   defstruct [:user_id, :password, :hashed_password, :email, active: true]
 
   alias ExpenseTracker.Support.Auth

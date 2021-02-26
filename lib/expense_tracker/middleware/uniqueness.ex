@@ -1,6 +1,8 @@
 defmodule ExpenseTracker.Middleware.Uniqueness do
-  alias ExpenseTracker.Protocol.UniqueFields
+  @moduledoc false
+
   alias Commanded.Middleware.Pipeline
+  alias ExpenseTracker.Protocol.UniqueFields
 
   import Pipeline
 

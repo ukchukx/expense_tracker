@@ -41,20 +41,19 @@ defmodule ExpenseTracker.Web.PageController do
 
   def create_budget(%{assigns: %{current_user: %{"id" => user_id}}} = conn, params) do
     context = %{user: %{id: user_id}}
-
     %{"start_date" => s, "end_date" => e} = params
 
-    params =
-      params
-      |> Map.put("start_date", Date.from_iso8601!(s))
-      |> Map.put("end_date", Date.from_iso8601!(e))
+    params
+    |> Map.put("start_date", Date.from_iso8601!(s))
+    |> Map.put("end_date", Date.from_iso8601!(e))
+    |> AtomizeKeys.atomize_string_keys()
+    |> Budgets.create_budget(context)
+    |> case do
+      {:ok, budget} ->
+        conn
+        |> Plug.Conn.put_status(201)
+        |> json(%{data: budget})
 
-    with {:ok, budget} <-
-           params |> AtomizeKeys.atomize_string_keys() |> Budgets.create_budget(context) do
-      conn
-      |> Plug.Conn.put_status(201)
-      |> json(%{data: budget})
-    else
       {:error, err} ->
         Logger.error("Error while creating budget #{inspect(err)}")
 

@@ -1,4 +1,6 @@
 defmodule ExpenseTracker.Web.Plugs.LoadCurrentUser do
+  @moduledoc false
+
   import Plug.Conn
 
   def init(opts), do: opts

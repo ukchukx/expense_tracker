@@ -1,4 +1,6 @@
 defmodule ExpenseTracker.Support.SetupDatabase do
+  @moduledoc false
+
   alias ExpenseTracker.Repo
   alias EventStore.Tasks.{Create, Init}
   require Logger

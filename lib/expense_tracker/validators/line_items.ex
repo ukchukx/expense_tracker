@@ -1,4 +1,6 @@
 defmodule ExpenseTracker.Validators.LineItemsValidator do
+  @moduledoc false
+
   def validate(value) do
     case Enum.all?(value, &validate_line_item/1) do
       true ->
