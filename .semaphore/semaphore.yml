@@ -1,0 +1,94 @@
+version: v1.0
+name: Expense tracker build pipeline
+agent:
+  machine:
+    type: e1-standard-2
+    os_image: ubuntu1804
+
+blocks:
+  - name: Check master
+    task:
+      jobs:
+        - name: check master
+          commands:
+            - if [ "$SEMAPHORE_GIT_BRANCH" != "master" ]; then false; fi
+            - echo 'Master branch received'
+
+  - name: Build Docker image
+    task:
+      secrets:
+        - name: expense-tracker-env-vars
+      prologue:
+        commands:
+          - checkout
+          - kiex install 1.11
+          - sem-version elixir 1.11
+      jobs:
+        - name: Compile and build plts
+          commands:
+            - cache restore
+            - cache restore dialyzer-plt
+            - MIX_ENV=test mix do deps.get, compile, dialyzer --plt
+            - cache store
+            - cache store et-dialyzer-plt priv/plts/
+
+  - name: Analyze
+    task:
+      prologue:
+        commands:
+          - checkout
+          - kiex install 1.11
+          - sem-version elixir 1.11
+          - cache restore
+          - cache restore dialyzer-plt
+      jobs:
+        - name: credo
+          commands:
+            - mix credo --strict
+        - name: dialyzer
+          commands:
+            - mix dialyzer --halt-exit-status --no-compile
+        - name: formatter
+          commands:
+            - mix format --check-formatted
+
+  - name: Test
+    task:
+      secrets:
+        - name: expense-tracker-env-vars
+      prologue:
+        commands:
+          - checkout
+          - kiex install 1.11
+          - sem-version elixir 1.11
+          - cache restore
+          - sem-service start postgres 11 --username=$ET_DB_USER --password=$ET_DB_PASS --db=$ET_TEST_EVENT_DB
+          - createdb -U postgres -h 0.0.0.0 $ET_TEST_READ_DB
+      jobs:
+        - name: ex_unit
+          commands:
+            - mix test
+
+  - name: Build Docker image
+    task:
+      secrets:
+        - name: headless-commerce-pat
+      prologue:
+        commands:
+          - checkout
+      jobs:
+        - name: build image
+          commands:
+            - docker build -t expense_tracker .
+            - echo $HEADLESS_COMMERCE_PAT | docker login ghcr.io -u ukchukx --password-stdin
+            - docker image tag expense_tracker ghcr.io/headless-commerce/expense_tracker
+            - docker image push ghcr.io/headless-commerce/expense_tracker
+            - cache store k8s-$SEMAPHORE_WORKFLOW_ID k8s
+
+promotions:
+  - name: Deploy to production
+    pipeline_file: deploy.yml
+    auto_promote_on:
+      - result: passed
+        branch:
+          - master

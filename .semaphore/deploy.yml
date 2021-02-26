@@ -1,0 +1,29 @@
+version: v1.0
+name: Expense tracker deployment pipeline
+agent:
+  machine:
+    type: e1-standard-2
+    os_image: ubuntu1804
+blocks:
+  - name: Transfer k8s YAMLs
+    task:
+      secrets:
+        - name: ssh-key
+      jobs:
+        - name: transfer
+          commands:
+          - cache restore k8s-$SEMAPHORE_WORKFLOW_ID
+          - echo 'Transferring k8s yamls to production...'
+          - chmod 0600 ~/ssh-key/id_rsa*
+          - scp -i ~/ssh-key/id_rsa -o StrictHostKeyChecking=no k8s ubuntu@212.71.237.8:~/apps/expense-tracker/
+
+  - name: Deploy
+    task:
+      secrets:
+        - name: ssh-key
+      jobs:
+        - name: deploy
+          commands:
+          - echo 'Deploying on server...'
+          - chmod 0600 ~/ssh-key/id_rsa*
+          - ssh -i ~/ssh-key/id_rsa -o StrictHostKeyChecking=no ubuntu@109.237.25.250 'cd ~/apps/expense-tracker;kubectl apply -f db.yml; kubectl apply -f app.yml'
