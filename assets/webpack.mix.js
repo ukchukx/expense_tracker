@@ -1,8 +1,13 @@
 const mix = require('laravel-mix');
 const path = require('path');
 const tailwindcss = require('tailwindcss');
+const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 require('laravel-mix-purgecss');
 require('laravel-mix-eslint');
+
+const plugins = process.env.NODE_ENV === 'development' ? 
+  [new HardSourceWebpackPlugin({ info: { level: 'warn' } })] 
+  : [];
 
 mix.setPublicPath('../priv/static')
   .js('js/app.js', 'js/app.js')
@@ -17,7 +22,9 @@ mix.setPublicPath('../priv/static')
       alias: {
         '@': path.resolve(__dirname, 'js')
       }
-    }
+    },
+    stats: 'minimal',
+    plugins
   })
   .options({
     clearConsole: false,
@@ -28,4 +35,5 @@ mix.setPublicPath('../priv/static')
     enabled: mix.inProduction(),
     content: ["../**/*.html.eex", "../**/views/**/*.ex", "./js/**/*.js"],
     defaultExtractor: content => content.match(/[\w-/:]+(?<!:)/g) || []
-  });
+  })
+  .disableNotifications();
