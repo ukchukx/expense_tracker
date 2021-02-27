@@ -16,9 +16,6 @@ blocks:
 
   - name: Compile and build plts
     task:
-      env_vars:
-        - name: MIX_ENV
-          value: "test"
       secrets:
         - name: expense-tracker-env-vars
       prologue:
@@ -39,9 +36,6 @@ blocks:
 
   - name: Analyze
     task:
-      env_vars:
-        - name: MIX_ENV
-          value: "test"
       prologue:
         commands:
           - checkout
