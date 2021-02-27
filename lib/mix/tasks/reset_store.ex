@@ -11,7 +11,7 @@ defmodule Mix.Tasks.ResetStore do
 
   def run(args), do: reset_read_models!(args)
 
-  def reset_event_store, do: Initializer.reset(event_store_conn())
+  def reset_event_store, do: Initializer.reset!(event_store_conn())
 
   defp reset_read_models!(args) do
     Enum.each([:postgrex, :ecto], &Application.ensure_all_started/1)
