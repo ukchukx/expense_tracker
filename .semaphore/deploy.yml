@@ -13,6 +13,7 @@ blocks:
         - name: transfer
           commands:
           - cache restore k8s-$SEMAPHORE_WORKFLOW_ID
+          - chmod 0600 ~/.j-master-ssh/id_rsa*
           - echo 'Transferring k8s YAMLs to production...'
           - scp -i ~/.j-master-ssh/id_rsa -o StrictHostKeyChecking=no k8s/{app,db}.yml ubuntu@212.71.237.8:~/apps/expense-tracker/
 
@@ -24,4 +25,5 @@ blocks:
         - name: deploy
           commands:
           - echo 'Deploying on server...'
+          - chmod 0600 ~/.j-master-ssh/id_rsa*
           - ssh -i ~/.j-master-ssh/id_rsa -o StrictHostKeyChecking=no ubuntu@109.237.25.250 'cd ~/apps/expense-tracker;kubectl apply -f db.yml; kubectl apply -f app.yml'
