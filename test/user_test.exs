@@ -14,7 +14,7 @@ defmodule ExpenseTracker.UserTest do
     end
 
     test "can be updated" do
-      assert {:ok, %User{id: user_id} = user} = fixture(:user)
+      assert {:ok, %User{} = user} = fixture(:user)
 
       params = build_user_params() |> Map.take([:email, :password])
 
@@ -46,7 +46,7 @@ defmodule ExpenseTracker.UserTest do
     end
 
     test "cannot be enabled if already enabled" do
-      assert {:ok, %User{id: user_id} = user} = fixture(:user)
+      assert {:ok, %User{} = user} = fixture(:user)
       assert {:error, :already_enabled} = Accounts.enable_user(user)
     end
   end

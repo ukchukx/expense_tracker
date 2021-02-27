@@ -5,8 +5,8 @@ defmodule ExpenseTracker.Storage do
   Clear the event store and read store databases
   """
   def reset! do
-    :ok = Application.stop(:expense_tracker)
-    :ok = Application.stop(:commanded)
+    Application.stop(:expense_tracker)
+    Application.stop(:commanded)
     reset_event_store()
     reset_read_store()
     {:ok, _} = Application.ensure_all_started(:expense_tracker)
@@ -19,7 +19,7 @@ defmodule ExpenseTracker.Storage do
     |> EventStore.Config.default_postgrex_opts()
     |> Postgrex.start_link()
     |> elem(1)
-    |> EventStore.Storage.Initializer.reset()
+    |> EventStore.Storage.Initializer.reset!()
   end
 
   defp reset_read_store do

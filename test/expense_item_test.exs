@@ -24,7 +24,7 @@ defmodule ExpenseTracker.ExpenseItemTest do
     end
 
     test "can be listed for a line item" do
-      assert {:ok, %ExpenseItem{user_id: user_id, line_item_id: item_id}} = fixture(:expense_item)
+      assert {:ok, %ExpenseItem{line_item_id: item_id}} = fixture(:expense_item)
       assert [%{}] = Budgets.expense_items_for_line_item(item_id)
     end
 
