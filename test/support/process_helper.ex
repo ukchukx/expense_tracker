@@ -24,9 +24,6 @@ defmodule ExpenseTracker.Helpers.ProcessHelper do
     end
   end
 
-  @doc """
-  Shutdown a named process.
-  """
   def shutdown(name) when is_atom(name) do
     case Process.whereis(name) do
       nil -> :ok
