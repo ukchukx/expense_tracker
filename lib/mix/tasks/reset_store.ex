@@ -18,6 +18,7 @@ defmodule Mix.Tasks.ResetStore do
     Repo.start_link()
 
     Logger.info("Resetting subscriptions table...")
+
     try do
       reset_subscription_table()
     rescue

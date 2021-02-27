@@ -17,11 +17,7 @@ defmodule ExpenseTracker.Web.PageController do
         [latest_budget = %{line_items: items, id: id, name: name} | other_budgets] ->
           case Budgets.current_budget?(latest_budget) do
             true ->
-              items =
-                Enum.map(items, fn item ->
-                  Map.put(item, "href", Routes.page_path(conn, :line_item, id, item["id"]))
-                end)
-
+              items = add_href_to_items(items, id, conn)
               {%{latest_budget | line_items: items}, List.first(other_budgets), name}
 
             false ->
@@ -72,28 +68,7 @@ defmodule ExpenseTracker.Web.PageController do
       user_id
       |> Budgets.budgets_for_user()
       |> Budgets.calculate_line_item_expensed_values_for_budgets()
-      |> Enum.map(fn budget = %{line_items: items, id: id} ->
-        current? = Budgets.current_budget?(budget)
-
-        href =
-          case current? do
-            false -> Routes.page_path(conn, :budget_details, budget.id)
-            true -> "#"
-          end
-
-        items =
-          case current? do
-            false ->
-              Enum.map(items, fn item ->
-                Map.put(item, "href", Routes.page_path(conn, :line_item, id, item["id"]))
-              end)
-
-            true ->
-              items
-          end
-
-        %{budget | href: href, line_items: items}
-      end)
+      |> Enum.map(&add_href_to_budget_and_items(&1, conn))
 
     render(conn, "budgets.html", user: user, budgets: budgets, page_title: "Budgets")
   end
@@ -174,4 +149,28 @@ defmodule ExpenseTracker.Web.PageController do
   end
 
   def catch_all(conn, _), do: redirect(conn, to: Routes.page_path(conn, :index))
+
+  defp add_href_to_budget_and_items(%{line_items: items, id: id} = budget, conn) do
+    current? = Budgets.current_budget?(budget)
+
+    href =
+      case current? do
+        false -> Routes.page_path(conn, :budget_details, budget.id)
+        true -> "#"
+      end
+
+    items =
+      case current? do
+        false -> add_href_to_items(items, id, conn)
+        true -> items
+      end
+
+    %{budget | href: href, line_items: items}
+  end
+
+  defp add_href_to_items(items, budget_id, conn) do
+    Enum.map(items, fn item ->
+      Map.put(item, "href", Routes.page_path(conn, :line_item, budget_id, item["id"]))
+    end)
+  end
 end
