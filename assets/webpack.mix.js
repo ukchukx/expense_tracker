@@ -31,9 +31,4 @@ mix.setPublicPath('../priv/static')
     processCssUrls: false,
     postCss: [tailwindcss('./tailwind.config.js')]
   })
-  .purgeCss({
-    enabled: mix.inProduction(),
-    content: ["../**/*.html.eex", "../**/views/**/*.ex", "./js/**/*.js"],
-    defaultExtractor: content => content.match(/[\w-/:]+(?<!:)/g) || []
-  })
   .disableNotifications();

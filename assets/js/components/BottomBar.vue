@@ -42,7 +42,7 @@ export default {
     const commonClasses = 'no-underline inline-block text-center py-4 border-b';
     let defaultClasses = 'opacity-50 text-gray-600 md:opacity-100 border-transparent';
     defaultClasses = `md:hover:border-gray-600 ${defaultClasses} ${commonClasses}`;
-    const activeClasses = `text-teal-600 border-teal-600 ${commonClasses}`;
+    const activeClasses = `text-green-600 border-green-600 ${commonClasses}`;
 
     const budgetSelected = computed(() => props.selectedTab === 'budget');
     const budgetsSelected = computed(() => props.selectedTab === 'budgets');

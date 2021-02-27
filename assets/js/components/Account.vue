@@ -7,7 +7,7 @@
         <div>
           <a 
             href="/signout"
-            class="bg-transparent text-teal-700 border border-teal-700 rounded px-6 py-2">
+            class="bg-transparent text-green-700 border border-green-700 rounded px-6 py-2">
             Sign out
           </a>
         </div>

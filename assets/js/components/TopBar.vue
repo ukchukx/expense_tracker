@@ -1,6 +1,6 @@
 <template>
   <!-- eslint-disable -->
-  <div class="bg-teal-500">
+  <div class="bg-green-500">
     <div class="container mx-auto px-4">
       <div class="flex items-center md:justify-between py-4">
         <div class="w-1/4 md:hidden">

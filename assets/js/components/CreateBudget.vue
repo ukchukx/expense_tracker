@@ -4,7 +4,7 @@
     <h2 class="text-5xl">Create a budget for {{ state.budget.name }}</h2>
     <h4 class="text-2xl mt-3 mb-3">Add expense items:</h4>
     <form class="w-full max-w-sm">
-      <div class="flex items-center border-b border-teal-500 py-2">
+      <div class="flex items-center border-b border-green-500 py-2">
         <input 
           class="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none" 
           type="text" 
@@ -19,7 +19,7 @@
         <button 
           @click="addItem"
           :disabled="!canAddItem"
-          class="flex-shrink-0 bg-teal-500 border-teal-500 text-sm border-4 text-white py-1 px-2 rounded" 
+          class="flex-shrink-0 bg-green-500 border-green-500 text-sm border-4 text-white py-1 px-2 rounded" 
           type="button">
           Add
         </button>
@@ -54,7 +54,7 @@
           </table>
         </div>
       </div>
-      <button @click="createBudget" class="bg-teal-500 text-white font-bold py-2 px-4 rounded">
+      <button @click="createBudget" class="bg-green-500 text-white font-bold py-2 px-4 rounded">
         Create budget
       </button>
     </div>

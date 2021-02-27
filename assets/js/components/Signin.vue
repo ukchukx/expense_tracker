@@ -39,15 +39,15 @@
           <button 
             :disabled="hasErrors"
             @click="submitForm"
-            class="bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" 
+            class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" 
             type="button">
             Sign In
           </button>
-          <a class="inline-block align-baseline font-bold text-sm text-teal-500 hover:text-teal-800" href="#">
+          <a class="inline-block align-baseline font-bold text-sm text-green-500 hover:text-green-800" href="#">
             Forgot Password?
           </a>
         </div>
-        <a class="inline-block align-baseline font-bold text-sm text-teal-500" href="/signup">
+        <a class="inline-block align-baseline font-bold text-sm text-green-500" href="/signup">
           Don't have an account? Sign Up
         </a>
       </form>

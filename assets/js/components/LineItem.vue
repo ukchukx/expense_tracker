@@ -6,19 +6,19 @@
     <form class="w-full hidden md:block">
       <div class="flex items-center py-2">
         <input 
-          class="appearance-none bg-transparent border-b border-teal-500 w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none" 
+          class="appearance-none bg-transparent border-b border-green-500 w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none" 
           type="text" 
           list="suggestions"
           v-model="state.form.description"
           @keyup.enter="addExpense"
           :placeholder="placeholder">
         <NairaInput 
-          class="appearance-none bg-transparent border-b border-teal-500 w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none" 
+          class="appearance-none bg-transparent border-b border-green-500 w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none" 
           :initial-amount="state.form.amount"
           ref="amountInput"
           v-model="state.form.amount" />
         <input 
-          class="appearance-none bg-transparent border-b border-teal-500 w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none" 
+          class="appearance-none bg-transparent border-b border-green-500 w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none" 
           type="date" 
           :max="state.todayDate"
           v-model="state.form.date"
@@ -27,7 +27,7 @@
         <button 
           @click="addExpense"
           :disabled="!canAddExpense"
-          class="flex-shrink-0 bg-teal-500 border-teal-500 text-sm border-4 text-white py-1 px-2 rounded" 
+          class="flex-shrink-0 bg-green-500 border-green-500 text-sm border-4 text-white py-1 px-2 rounded" 
           type="button">
           {{ addExpenseButtonLabel }}
         </button>
@@ -37,7 +37,7 @@
     <form class="w-full md:hidden sm:block">
       <div class="flex items-center py-2">
         <input 
-          class="appearance-none bg-transparent border-b border-teal-500 w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none" 
+          class="appearance-none bg-transparent border-b border-green-500 w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none" 
           type="text"
           list="suggestions"
           v-model="state.form.description"
@@ -46,14 +46,14 @@
       </div>
       <div class="flex items-center py-2">
         <NairaInput 
-          class="appearance-none bg-transparent border-b border-teal-500 w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none" 
+          class="appearance-none bg-transparent border-b border-green-500 w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none" 
           :initial-amount="state.form.amount"
           ref="amountInput"
           v-model="state.form.amount" />
       </div>
       <div class="flex items-center py-2">
         <input 
-          class="appearance-none bg-transparent border-b border-teal-500 w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none" 
+          class="appearance-none bg-transparent border-b border-green-500 w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none" 
           type="date" 
           :max="state.todayDate"
           v-model="state.form.date">
@@ -62,7 +62,7 @@
         <button 
           @click="addExpense"
           :disabled="!canAddExpense"
-          class="flex-shrink-0 bg-teal-500 border-teal-500 text-sm border-4 text-white py-1 px-2 rounded" 
+          class="flex-shrink-0 bg-green-500 border-green-500 text-sm border-4 text-white py-1 px-2 rounded" 
           type="button">
           {{ addExpenseButtonLabel }}
         </button>
