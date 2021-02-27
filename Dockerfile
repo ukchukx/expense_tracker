@@ -12,7 +12,7 @@ WORKDIR /app
 COPY . .
 COPY --from=deps /app ./
 
-RUN MIX_ENV=prod mix do phx.digest, release --overwrite
+RUN npm --prefix assets run deploy; MIX_ENV=prod mix do phx.digest, release --overwrite
 
 # --- Run ---
 FROM alpine:latest
