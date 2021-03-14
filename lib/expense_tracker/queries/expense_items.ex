@@ -11,6 +11,8 @@ defmodule ExpenseTracker.Queries.ExpenseItems do
 
   def for_line_item(id), do: from(e in ExpenseItem, where: e.line_item_id == ^id)
 
+  def latest_first(query), do: order_by(query, [e], desc: e.date)
+
   def for_line_item(query, id), do: from(q in query, where: q.line_item_id == ^id)
 
   def for_line_items(ids), do: from(q in ExpenseItem, where: q.line_item_id in ^ids)

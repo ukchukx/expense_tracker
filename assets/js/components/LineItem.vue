@@ -138,9 +138,7 @@ export default {
     const formatDate = (isoDate) => format(new Date(isoDate), 'do');
     const { formatKoboAmount } = useAmountFormatter();
     const todayDate = getDateString(new Date());
-    const expenseItems = [...props.expenseItems]
-      .reverse()
-      .map((d) => ({ ...d, date: formatDate(d.date) }));
+    const expenseItems = props.expenseItems.map((d) => ({ ...d, date: formatDate(d.date) }));
     const availableDescriptions = new Set();
     availableDescriptions.add(props.item.description);
     expenseItems.forEach(({ description }) => availableDescriptions.add(description));

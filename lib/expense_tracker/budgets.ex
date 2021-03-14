@@ -103,7 +103,11 @@ defmodule ExpenseTracker.Budgets do
     do: budget_id |> ExpenseItems.for_budget() |> Queries.fetch_all()
 
   def expense_items_for_line_item(line_item_id),
-    do: line_item_id |> ExpenseItems.for_line_item() |> Queries.fetch_all()
+    do:
+      line_item_id
+      |> ExpenseItems.for_line_item()
+      |> ExpenseItems.latest_first()
+      |> Queries.fetch_all()
 
   def expense_items_for_line_items(line_item_ids),
     do: line_item_ids |> ExpenseItems.for_line_items() |> Queries.fetch_all()
