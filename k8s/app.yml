@@ -48,13 +48,13 @@ spec:
               name: expense-tracker-secrets
               key: dbPass
         - name: ET_DB_HOST
-          value: 'expense-tracker-db'
+          value: 'postgresql'
         - name: ET_DB_POOL_SIZE
-          value: '15'
+          value: '10'
         - name: ET_READ_DB
-          value: 'reads'
+          value: 'expense_tracker_reads'
         - name: ET_EVENT_DB
-          value: 'events'
+          value: 'expense_tracker_events'
         - name: ET_DNS_ADDR
           value: 'expense-tracker.moview.com.ng'
         - name: ET_HTTP_PORT

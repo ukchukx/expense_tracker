@@ -2,3 +2,4 @@
 /.elixir_ls
 /_build
 /test
+assets/node_modules/
