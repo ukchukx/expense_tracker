@@ -11,8 +11,7 @@ config :expense_tracker, :router, timeout: 10_000
 
 config :expense_tracker,
   ecto_repos: [ExpenseTracker.Repo],
-  event_stores: [ExpenseTracker.EventStore],
-  enable_db_creation: {:system, :boolean, "ET_ENABLE_DB_CREATION", false}
+  event_stores: [ExpenseTracker.EventStore]
 
 config :commanded_ecto_projections, repo: ExpenseTracker.Repo
 

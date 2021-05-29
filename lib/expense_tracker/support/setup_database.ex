@@ -5,18 +5,11 @@ defmodule ExpenseTracker.Support.SetupDatabase do
   alias EventStore.Tasks.{Create, Init}
   require Logger
 
-  def run do
-    case Application.get_env(:expense_tracker, :enable_db_creation) do
-      false ->
-        :ok
-
-      true ->
-        create_read_db()
-        setup_event_store()
-    end
-
-    run_migrations()
+  def create_databases do
+    create_read_db()
+    setup_event_store()
   end
+
 
   defp create_read_db do
     Logger.info("Creating read database...")
@@ -37,9 +30,8 @@ defmodule ExpenseTracker.Support.SetupDatabase do
     Init.exec(event_store, config, [])
   end
 
-  defp run_migrations do
+  def run_migrations do
     Logger.info("Running read database migrations...")
-
     path = Application.app_dir(:expense_tracker, "priv/repo/migrations")
     Ecto.Migrator.run(Repo, path, :up, all: true)
     Logger.info("Done running migrations")

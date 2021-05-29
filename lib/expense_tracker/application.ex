@@ -9,6 +9,7 @@ defmodule ExpenseTracker.Application do
 
   def start(_type, _args) do
     Confex.resolve_env!(:expense_tracker)
+    SetupDatabase.create_databases()
 
     children = [
       ExpenseTracker.CommandedApp,
@@ -34,7 +35,7 @@ defmodule ExpenseTracker.Application do
         ExpenseTracker.TelemetryReporter.setup()
 
         if Application.get_env(:expense_tracker, :env) != :test do
-          SetupDatabase.run()
+          SetupDatabase.run_migrations()
         end
 
         res
