@@ -6,8 +6,15 @@ defmodule ExpenseTracker.Support.SetupDatabase do
   require Logger
 
   def run do
-    create_read_db()
-    setup_event_store()
+    case Application.get_env(:expense_tracker, :enable_db_creation) do
+      false ->
+        :ok
+
+      true ->
+        create_read_db()
+        setup_event_store()
+    end
+
     run_migrations()
   end
 
