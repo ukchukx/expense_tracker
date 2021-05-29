@@ -10,7 +10,6 @@ defmodule ExpenseTracker.Support.SetupDatabase do
     setup_event_store()
   end
 
-
   defp create_read_db do
     Logger.info("Creating read database...")
 
