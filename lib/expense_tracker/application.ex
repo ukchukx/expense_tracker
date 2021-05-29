@@ -9,7 +9,10 @@ defmodule ExpenseTracker.Application do
 
   def start(_type, _args) do
     Confex.resolve_env!(:expense_tracker)
-    SetupDatabase.create_databases()
+
+    if Application.get_env(:expense_tracker, :env) != :test do
+      SetupDatabase.create_databases()
+    end
 
     children = [
       ExpenseTracker.CommandedApp,
