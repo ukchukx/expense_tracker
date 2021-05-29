@@ -49,9 +49,9 @@ spec:
         - name: ET_DB_POOL_SIZE
           value: '10'
         - name: ET_READ_DB
-          value: 'expense_tracker_reads'
+          value: 'expense_tracker_read'
         - name: ET_EVENT_DB
-          value: 'expense_tracker_events'
+          value: 'expense_tracker'
         - name: ET_DNS_ADDR
           value: 'expense-tracker.moview.com.ng'
         - name: ET_HTTP_PORT
