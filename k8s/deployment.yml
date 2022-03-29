@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: expense-tracker
-  namespace: expense-tracker
   labels:
     app: expense-tracker
 spec:
@@ -23,6 +22,7 @@ spec:
         imagePullPolicy: Always
         ports:
         - containerPort: 4000
+        - containerPort: 5432
         readinessProbe:
           httpGet:
             path: /health/ready
@@ -38,21 +38,16 @@ spec:
         env:
         - name: ET_DB_USER
           value: 'expense_tracker'
-        - name: ET_DB_PASS
-          valueFrom:
-            secretKeyRef:
-              name: expense-tracker-secrets
-              key: dbPass
         - name: ET_DB_HOST
-          value: 'expense-tracker-db'
+          value: 'postgresql'
         - name: ET_DB_POOL_SIZE
-          value: '15'
+          value: '10'
         - name: ET_READ_DB
-          value: 'reads'
+          value: 'expense_tracker_read'
         - name: ET_EVENT_DB
-          value: 'events'
+          value: 'expense_tracker'
         - name: ET_DNS_ADDR
-          value: 'expense-tracker.local'
+          value: 'expense-tracker.moview.com.ng'
         - name: ET_HTTP_PORT
           value: '4000'
         - name: ET_SECRET_KEY_BASE
@@ -60,12 +55,19 @@ spec:
             secretKeyRef:
               name: expense-tracker-secrets
               key: secretKeyBase
+        - name: ET_DB_PASS
+          valueFrom:
+            secretKeyRef:
+              name: expense-tracker-secrets
+              key: dbPass
 ---
 kind: Service
 apiVersion: v1
 metadata:
   name: expense-tracker
-  namespace: expense-tracker
+  labels:
+    app: expense-tracker
+    release: kube-prometheus-stack
 spec:
   ports:
   - name: web
@@ -73,19 +75,3 @@ spec:
     targetPort: 4000
   selector:
     app: expense-tracker
----
-
-apiVersion: traefik.containo.us/v1alpha1
-kind: IngressRoute
-metadata:
-  name: expense-tracker-web
-  namespace: expense-tracker
-spec:
-  entryPoints:
-    - web
-  routes:
-  - kind: Rule
-    match: Host(`expense-tracker.local`)
-    services:
-    - name: expense-tracker
-      port: 80

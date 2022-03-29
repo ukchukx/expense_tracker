@@ -1,0 +1,19 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: expense-tracker
+  labels:
+    app: expense-tracker
+    release: kube-prometheus-stack
+spec:
+  endpoints:
+  - port: web
+    interval: 30s
+    path: '/metrics'
+  namespaceSelector:
+    matchNames:
+    - expense-tracker
+  selector:
+    matchLabels:
+      app: expense-tracker
+      release: kube-prometheus-stack

@@ -34,6 +34,5 @@ npm-debug.log
 # this depending on your deployment strategy.
 /priv/static/
 .env*
-k8s/secrets.yml
 /priv/plts/*.plt
 /priv/plts/*.plt.hash
