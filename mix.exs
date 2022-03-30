@@ -52,7 +52,6 @@ defmodule ExpenseTracker.MixProject do
       {:ecto_sql, "~> 3.4"},
       {:faker, "~> 0.13", only: :test},
       {:gettext, "~> 0.11"},
-      {:healthchex, "~> 0.2"},
       {:jason, "~> 1.0"},
       {:observer_cli, "~> 1.5"},
       {:phoenix, "~> 1.5.0"},
