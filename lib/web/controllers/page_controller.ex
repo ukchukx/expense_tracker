@@ -42,6 +42,7 @@ defmodule ExpenseTracker.Web.PageController do
     params
     |> Map.put("start_date", Date.from_iso8601!(s))
     |> Map.put("end_date", Date.from_iso8601!(e))
+    |> Map.put_new("currency", "NGN")
     |> AtomizeKeys.atomize_string_keys()
     |> Budgets.create_budget(context)
     |> case do
@@ -109,12 +110,13 @@ defmodule ExpenseTracker.Web.PageController do
         %{assigns: %{current_user: %{"id" => user_id}}} = conn,
         %{"budget_id" => b_id, "line_item_id" => item_id} = params
       ) do
-    with {:ok, %{user_id: ^user_id, line_items: items}} <- Budgets.budget_by_id(b_id),
+    with {:ok, %{user_id: ^user_id, currency: currency, line_items: items}} <- Budgets.budget_by_id(b_id),
          true <- Enum.any?(items, &(&1["id"] == item_id)),
          today_date <- Date.utc_today() |> Date.to_string(),
          params =
            params
            |> Map.take(["amount", "description", "date"])
+           |> Map.put("currency", currency)
            |> Map.put_new("date", today_date)
            |> AtomizeKeys.atomize_string_keys(),
          {:ok, expense} <-

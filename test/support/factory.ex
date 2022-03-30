@@ -1,7 +1,7 @@
 defmodule ExpenseTracker.Factory do
   alias ExpenseTracker.Commands.{CreateUser, CreateExpenseItem, CreateBudget}
   alias ExpenseTracker.Aggregates.{Budget, ExpenseItem, User}
-  alias ExpenseTracker.Support.Utils
+  alias ExpenseTracker.Support.{Currency, Utils}
 
   use ExMachina
 
@@ -23,6 +23,7 @@ defmodule ExpenseTracker.Factory do
       name: Utils.budget_name(start_date),
       start_date: start_date,
       end_date: Faker.Date.forward(30),
+      currency: "NGN",
       line_items: [
         %{amount: 10_000, description: Faker.Lorem.word(), id: Ecto.UUID.generate()},
         %{amount: 20_000, description: Faker.Lorem.word(), id: Ecto.UUID.generate()}
@@ -36,6 +37,7 @@ defmodule ExpenseTracker.Factory do
       expense_item_id: Ecto.UUID.generate(),
       line_item_id: Ecto.UUID.generate(),
       description: Faker.Lorem.sentence(1..2),
+      currency: "NGN",
       amount: 10_000,
       date: 4 |> Faker.Date.backward() |> Date.to_string()
     }

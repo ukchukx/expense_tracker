@@ -6,6 +6,7 @@ defmodule ExpenseTracker.Repo.Migrations.CreateBudgets do
       add :id, :uuid, primary_key: true
       add :user_id, :uuid
       add :name, :string, size: 100
+      add :currency, :string
       add :start_date, :date
       add :end_date, :date
       add :line_items, {:array, :map}, default: []

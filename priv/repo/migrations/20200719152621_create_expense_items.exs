@@ -9,6 +9,7 @@ defmodule ExpenseTracker.Repo.Migrations.CreateExpenseItems do
       add :line_item_id, :uuid
       add :description, :string
       add :date, :string
+      add :currency, :string
       add :amount, :integer
 
       timestamps(type: :utc_datetime)

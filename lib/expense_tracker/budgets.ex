@@ -7,7 +7,7 @@ defmodule ExpenseTracker.Budgets do
   alias ExpenseTracker.Projections.{Budget, ExpenseItem}
   alias ExpenseTracker.Support.Utils
 
-  def build_create_budget_command(%{start_date: d} = attrs, %{user: %{id: id}} = _context) do
+  def build_create_budget_command(%{start_date: d, currency: c} = attrs, %{user: %{id: id}} = _context) do
     items =
       attrs
       |> Map.get(:line_items)
@@ -21,6 +21,7 @@ defmodule ExpenseTracker.Budgets do
             %{id: _} = x -> x
             x -> Map.put(x, :id, Ecto.UUID.generate())
           end)
+          |> Enum.map(& Map.put(&1, :currency, c))
       end
 
     attrs =

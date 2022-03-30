@@ -1,13 +1,13 @@
 defmodule ExpenseTracker.Commands.CreateExpenseItem do
   @moduledoc false
 
-  defstruct [:expense_item_id, :budget_id, :line_item_id, :description, :amount, :date]
+  defstruct [:expense_item_id, :budget_id, :line_item_id, :description, :currency, :amount, :date]
 
   def assign_id(%__MODULE__{} = command, id), do: %__MODULE__{command | expense_item_id: id}
 end
 
 defimpl ExpenseTracker.Protocol.ValidCommand, for: ExpenseTracker.Commands.CreateExpenseItem do
-  alias ExpenseTracker.Validators.{StringValidator, Uuid}
+  alias ExpenseTracker.Validators.{Currency, StringValidator, Uuid}
 
   def validate(%{expense_item_id: expense_item_id, budget_id: budget_id} = command) do
     expense_item_id
@@ -17,6 +17,7 @@ defimpl ExpenseTracker.Protocol.ValidCommand, for: ExpenseTracker.Commands.Creat
     |> Kernel.++(validate_amount(command.amount))
     |> Kernel.++(validate_description(command.description))
     |> Kernel.++(validate_date(command.date))
+    |> Kernel.++(validate_currency(command.currency))
     |> case do
       [] -> :ok
       err_list -> {:error, err_list}
@@ -69,4 +70,16 @@ defimpl ExpenseTracker.Protocol.ValidCommand, for: ExpenseTracker.Commands.Creat
       _ -> [{:date, "is not a valid date"}]
     end
   end
+
+  defp validate_currency(""), do: [{:currency, "is empty"}]
+
+  defp validate_currency(nil), do: [{:currency, "is not a string"}]
+
+  defp validate_currency(currency) do
+    case Currency.validate(currency) do
+      :ok -> []
+      {:error, err} -> [{:currency, err}]
+    end
+  end
+
 end

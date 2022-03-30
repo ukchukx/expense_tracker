@@ -9,6 +9,7 @@ defmodule ExpenseTracker.Projections.Budget do
     :id,
     :user_id,
     :name,
+    :currency,
     :start_date,
     :end_date,
     :line_items,
@@ -22,6 +23,7 @@ defmodule ExpenseTracker.Projections.Budget do
   schema "budgets" do
     field :user_id, :binary_id
     field :name, :string
+    field :currency, :string
     field :start_date, :date
     field :end_date, :date
     field :line_items, {:array, :map}, default: []

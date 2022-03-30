@@ -1,14 +1,14 @@
 defmodule ExpenseTracker.Aggregates.ExpenseItem do
   @moduledoc false
 
-  defstruct [:id, :budget_id, :line_item_id, :description, :amount, :date, deleted: false]
+  defstruct [:id, :budget_id, :line_item_id, :description, :currency, :amount, :date, deleted: false]
 
   alias ExpenseTracker.Commands.{CreateExpenseItem, DeleteExpenseItem}
   alias ExpenseTracker.Events.{ExpenseItemCreated, ExpenseItemDeleted}
 
   @behaviour Commanded.Aggregates.AggregateLifespan
 
-  def after_event(%ExpenseItemDeleted{}), do: 5_000
+  def after_event(%ExpenseItemDeleted{}), do: :stop
   def after_event(_), do: :hibernate
 
   def after_command(_command), do: :infinity
@@ -20,6 +20,7 @@ defmodule ExpenseTracker.Aggregates.ExpenseItem do
       budget_id: c.budget_id,
       line_item_id: c.line_item_id,
       description: c.description,
+      currency: c.currency,
       amount: c.amount,
       date: c.date
     }
@@ -35,6 +36,7 @@ defmodule ExpenseTracker.Aggregates.ExpenseItem do
         budget_id: e.budget_id,
         line_item_id: e.line_item_id,
         description: e.description,
+        currency: e.currency,
         amount: e.amount,
         date: e.date
     }

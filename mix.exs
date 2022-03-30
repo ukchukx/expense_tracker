@@ -39,7 +39,7 @@ defmodule ExpenseTracker.MixProject do
   defp deps do
     [
       {:atomize_keys, "~> 1.1"},
-      {:bcrypt_elixir, "~> 2.2"},
+      {:bcrypt_elixir, "~> 3.0"},
       {:confex, "~> 3.4.0"},
       {:commanded, "~> 1.1"},
       {:commanded_eventstore_adapter, "~> 1.0.0"},
