@@ -21,7 +21,7 @@ defmodule ExpenseTracker.Budgets do
             %{id: _} = x -> x
             x -> Map.put(x, :id, Ecto.UUID.generate())
           end)
-          |> Enum.map(& Map.put(&1, :currency, c))
+          |> Enum.map(&Map.put(&1, :currency, c))
       end
 
     attrs =

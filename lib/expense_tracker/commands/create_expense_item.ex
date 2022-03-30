@@ -81,5 +81,4 @@ defimpl ExpenseTracker.Protocol.ValidCommand, for: ExpenseTracker.Commands.Creat
       {:error, err} -> [{:currency, err}]
     end
   end
-
 end

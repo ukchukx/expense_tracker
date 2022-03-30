@@ -8,7 +8,7 @@ defmodule ExpenseTracker.Validators.Currency do
       true -> :ok
       false -> {:error, :not_supported}
     end
-
   end
+
   def validate(_), do: {:error, :not_supported}
 end
