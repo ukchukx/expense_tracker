@@ -93,13 +93,14 @@ defmodule ExpenseTracker.Web.PageController do
   end
 
   def line_item(%{assigns: %{current_user: %{} = u}} = conn, %{"b" => id, "i" => item_id}) do
-    {:ok, %{line_items: items}} = Budgets.budget_by_id(id)
+    {:ok, %_{line_items: items, currency: currency}} = Budgets.budget_by_id(id)
     %{"description" => d} = item = Enum.find(items, &(&1["id"] == item_id))
     expense_items = Budgets.expense_items_for_line_item(item_id)
 
     render(conn, "line_item.html",
       user: u,
       budget_id: id,
+      budget_currency: currency,
       item: item,
       expense_items: expense_items,
       page_title: "#{d}"

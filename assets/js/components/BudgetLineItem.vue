@@ -5,8 +5,8 @@
       <a :href="href">{{ description }}</a>
     </div>
     <div class="w-1/3 text-right">
-      <span class="whitespace-no-wrap text-xl h-12 text-right md:mr-4">{{ formatKoboAmount(amount) }}</span>
-      <span class="whitespace-no-wrap text-xl h-12 text-right">({{ formatKoboAmount(expensed) }})</span>
+      <span class="whitespace-no-wrap text-xl h-12 text-right md:mr-4">{{ formatKoboAmount(amount, currency) }}</span>
+      <span class="whitespace-no-wrap text-xl h-12 text-right">({{ formatKoboAmount(expensed, currency) }})</span>
     </div>
     <div class="progressbar" :style="barStyle"></div>
   </div>
@@ -25,6 +25,10 @@ export default {
     amount: {
       type: Number,
       required: true
+    },
+    currency: {
+      type: String,
+      default: () => 'NGN'
     },
     expensed: {
       type: Number,

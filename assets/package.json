@@ -7,6 +7,7 @@
     "watch": "NODE_ENV=development webpack --watch --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
   },
   "dependencies": {
+    "@ukchukx/vue-money-input": "^1.0.0",
     "@vue/composition-api": "^1.0.0-beta.3",
     "axios": "^0.21.1",
     "date-fns": "^2.16.1",
@@ -14,8 +15,7 @@
     "phoenix": "file:../deps/phoenix",
     "phoenix_html": "file:../deps/phoenix_html",
     "phoenix_live_view": "file:../deps/phoenix_live_view",
-    "vue": "^2.6.11",
-    "vue-naira-input": "^1.1.2"
+    "vue": "^2.6.11"
   },
   "devDependencies": {
     "@babel/core": "^7.10.4",

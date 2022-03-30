@@ -9,6 +9,7 @@
               :amount="b.amount"
               :description="b.name"
               :expensed="b.expensed"
+              :currency="b.currency"
               :href="b.href"
               v-for="b in processedBudgets" :key="b.id" />
           </div>
@@ -42,15 +43,16 @@ export default {
   setup(props) {
     const { formatKoboAmount } = useAmountFormatter();
     const processedBudgets = props.budgets
-      .map(({ id, href, line_items, name }) => ({
+      .map(({ id, href, line_items, name, currency }) => ({
         amount: totalBudgetAmount({ line_items }),
         href,
         id,
         name,
+        currency,
         expensed: line_items.reduce((sum, { expensed }) => sum + expensed, 0)
       }));
 
-    const totalAmount = (budget) => formatKoboAmount(totalBudgetAmount(budget));
+    const totalAmount = (budget) => formatKoboAmount(totalBudgetAmount(budget), budget.currency);
 
     return {
       totalAmount,

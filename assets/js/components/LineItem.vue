@@ -12,9 +12,10 @@
           v-model="state.form.description"
           @keyup.enter="addExpense"
           :placeholder="placeholder">
-        <NairaInput 
+        <MoneyInput 
           class="appearance-none bg-transparent border-b border-green-500 w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none" 
           :initial-amount="state.form.amount"
+          :currency-symbol="lineItemCurrencySymbol"
           ref="amountInput"
           v-model="state.form.amount" />
         <input 
@@ -24,13 +25,7 @@
           v-model="state.form.date"
           placeholder="placeholder">
           
-        <button 
-          @click="addExpense"
-          :disabled="!canAddExpense"
-          class="flex-shrink-0 bg-green-500 border-green-500 text-sm border-4 text-white py-1 px-2 rounded" 
-          type="button">
-          {{ addExpenseButtonLabel }}
-        </button>
+        <BudgetButton  @click.native="addExpense" :disabled="!canAddExpense" :label="addExpenseButtonLabel" />
       </div>
     </form>
 
@@ -45,9 +40,10 @@
           :placeholder="placeholder">
       </div>
       <div class="flex items-center py-2">
-        <NairaInput 
+        <MoneyInput 
           class="appearance-none bg-transparent border-b border-green-500 w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none" 
           :initial-amount="state.form.amount"
+          :currency-symbol="lineItemCurrencySymbol"
           ref="amountInput"
           v-model="state.form.amount" />
       </div>
@@ -59,13 +55,7 @@
           v-model="state.form.date">
       </div>
       <div class="flex items-center py-2">
-        <button 
-          @click="addExpense"
-          :disabled="!canAddExpense"
-          class="flex-shrink-0 bg-green-500 border-green-500 text-sm border-4 text-white py-1 px-2 rounded" 
-          type="button">
-          {{ addExpenseButtonLabel }}
-        </button>
+        <BudgetButton  @click.native="addExpense" :disabled="!canAddExpense" :label="addExpenseButtonLabel" />
       </div>
     </form>
 
@@ -85,7 +75,7 @@
                   <span class="text-xs text-gray-500">{{ item.date }}</span>
                 </td>
                 <td class="py-3 whitespace-no-wrap text-right border-b border-gray-200">
-                  {{ formatKoboAmount(item.amount) }}
+                  {{ formatKoboAmount(item.amount, budgetCurrency) }}
                 </td>
                 <td class="py-3 text-right border-b border-gray-200 text-sm font-medium">
                   <a href="#" @click.stop.prevent="deleteExpense(i)" class="text-gray-600">Delete</a>
@@ -109,16 +99,18 @@
 </template>
 <script>
 import { reactive, computed } from '@vue/composition-api';
-import NairaInput from 'vue-naira-input';
+import MoneyInput from '@ukchukx/vue-money-input';
 import { format } from 'date-fns';
 import axios from 'axios';
+import BudgetButton from '@/components/BudgetButton';
 import useAmountFormatter from '@/features/useAmountFormatter';
 import { getDateString } from '@/features/budgetUtils';
 
 export default {
   name: 'LineItem',
   components: {
-    NairaInput
+    BudgetButton,
+    MoneyInput
   },
   props: {
     item: {
@@ -129,6 +121,10 @@ export default {
       type: String,
       required: true
     },
+    budgetCurrency: {
+      type: String,
+      required: true
+    },
     expenseItems: {
       type: Array,
       required: true
@@ -136,7 +132,7 @@ export default {
   },
   setup(props, { refs, emit }) {
     const formatDate = (isoDate) => format(new Date(isoDate), 'do');
-    const { formatKoboAmount } = useAmountFormatter();
+    const { formatKoboAmount, currencySymbol } = useAmountFormatter();
     const todayDate = getDateString(new Date());
     const expenseItems = props.expenseItems.map((d) => ({ ...d, date: formatDate(d.date) }));
     const availableDescriptions = new Set();
@@ -163,7 +159,8 @@ export default {
     const canAddExpense = computed(() => hasAmount.value && hasDescription.value && !state.busy);
     const addExpenseButtonLabel = computed(() => state.busy ? 'Busy...' : 'Add expense');
     const totalAmount = computed(() => 
-      formatKoboAmount(state.expenseItems.reduce((sum, { amount }) => sum + amount, 0)));
+      formatKoboAmount(state.expenseItems.reduce((sum, { amount }) => sum + amount, 0), props.budgetCurrency));
+    const lineItemCurrencySymbol = computed(() => currencySymbol(props.budgetCurrency));
 
     const addExpense = () => {
       if (!canAddExpense.value) return;
@@ -202,7 +199,8 @@ export default {
       canAddExpense,
       deleteExpense,
       formatKoboAmount,
-      availableDescriptions
+      availableDescriptions,
+      lineItemCurrencySymbol
     };
   }
 };

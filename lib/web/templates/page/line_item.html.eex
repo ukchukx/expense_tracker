@@ -3,6 +3,7 @@
     <line-item
       :item="<%= Jason.encode!(@item) %>"
       budget-id="<%= @budget_id %>"
+      budget-currency="<%= @budget_currency %>"
       :expense-items="<%= Jason.encode!(@expense_items) %>" />
   </page>
 </div>

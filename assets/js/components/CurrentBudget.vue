@@ -17,7 +17,9 @@
             :description="lineItem.description"
             :expensed="lineItem.expensed"
             :href="lineItem.href"
-            v-for="lineItem in budget.line_items" :key="lineItem.id" />
+            :currency="budget.currency"
+            v-for="lineItem in budget.line_items" 
+            :key="lineItem.id" />
           <div class="flex mb-4 border-b border-gray-200">
             <div class="w-2/3 whitespace-no-wrap text-xl h-12 text-left"></div>
             <div class="w-1/3 text-right">
@@ -50,8 +52,8 @@ export default {
   setup(props) {
     const { formatKoboAmount } = useAmountFormatter();
 
-    const totalAmount = computed(() => formatKoboAmount(totalBudgetAmount(props.budget)));
-    const totalExpense = computed(() => formatKoboAmount(totalBudgetExpense(props.budget)));
+    const totalAmount = computed(() => formatKoboAmount(totalBudgetAmount(props.budget), props.budget.currency));
+    const totalExpense = computed(() => formatKoboAmount(totalBudgetExpense(props.budget), props.budget.currency));
 
     return { totalAmount, totalExpense };
   }

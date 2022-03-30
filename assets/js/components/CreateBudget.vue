@@ -10,18 +10,15 @@
           v-model="state.form.description"
           @keyup.enter="addItem"
           :placeholder="currentPlaceholder">
-        <NairaInput 
+        <select v-model="state.budget.currency" class="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none">
+          <option :key="i" :value="x.value" v-for="(x, i) in currencies">{{ x.label }}</option>
+        </select>
+        <MoneyInput 
           class="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none" 
-          :initial-amount="10000"
-          ref="amountInput"
+          :initial-amount="100"
+          :currency-symbol="lineItemCurrencySymbol"
           v-model="state.form.amount" />
-        <button 
-          @click="addItem"
-          :disabled="!canAddItem"
-          class="flex-shrink-0 bg-green-500 border-green-500 text-sm border-4 text-white py-1 px-2 rounded" 
-          type="button">
-          Add
-        </button>
+        <BudgetButton @click.native="addItem" :disabled="!canAddItem" label="Add" />
       </div>
     </form>
     <div class="flex flex-col mt-8" v-show="state.budget.line_items.length">
@@ -34,7 +31,7 @@
                   {{ lineItem.description }}
                 </td>
                 <td class="py-3 whitespace-no-wrap border-b border-gray-200">
-                  {{ amountFormatter(lineItem.amount) }}
+                  {{ amountFormatter(lineItem.amount, state.budget.currency) }}
                 </td>
                 <td class="py-3 whitespace-no-wrap text-right border-b border-gray-200 text-sm font-medium">
                   <a href="#" @click.stop.prevent="removeLineItem(i)" class="text-gray-600">Remove</a>
@@ -43,25 +40,23 @@
             </tbody>
             <tfoot>
               <tr>
-                <th class="py-3 border-b border-gray-200 bg-gray-50 text-left text-sm font-medium text-gray-500 uppercase tracking-wider"></th>
-                <th class="py-3 border-b border-gray-200 bg-gray-50 text-sm font-medium text-gray-500 uppercase tracking-wider">
+                <th class="py-3 border-b border-gray-200 bg-gray-50 text-left text-sm font-medium text-gray-500 tracking-wider"></th>
+                <th class="py-3 border-b border-gray-200 bg-gray-50 text-sm font-medium text-gray-500 tracking-wider">
                   {{ totalAmount }}
                 </th>
-                <th class="py-3 border-b border-gray-200 bg-gray-50 text-sm font-medium text-gray-500 uppercase tracking-wider"></th>
+                <th class="py-3 border-b border-gray-200 bg-gray-50 text-sm font-medium text-gray-500 tracking-wider"></th>
               </tr>
             </tfoot>
           </table>
         </div>
       </div>
-      <button @click="createBudget" class="bg-green-500 text-white font-bold py-2 px-4 rounded">
-        Create budget
-      </button>
+      <BudgetButton @click.native="createBudget" label="Create budget" />
     </div>
   </div>
 </template>
 <script>
 import { reactive, computed } from '@vue/composition-api';
-import NairaInput from 'vue-naira-input';
+import MoneyInput from '@ukchukx/vue-money-input';
 import axios from 'axios';
 import { 
   currentBudgetName, 
@@ -70,11 +65,13 @@ import {
   totalBudgetAmount 
 } from '@/features/budgetUtils';
 import useAmountFormatter from '@/features/useAmountFormatter';
+import BudgetButton from '@/components/BudgetButton';
 
 export default {
   name: 'CreateBudget',
   components: {
-    NairaInput
+    BudgetButton,
+    MoneyInput
   },
   props: {
     previousBudget: {
@@ -82,9 +79,17 @@ export default {
       default: () => null
     }
   },
-  setup(props, { refs, emit }) {
-    const initialFormValues = { amount: 10000, description: '' };
-    const { amountFormatter, koboAmountToNaira } = useAmountFormatter();
+  setup(props, { emit }) {
+    const currencies = [
+      { value: 'USD', label: 'US Dollar' },
+      { value: 'NGN', label: 'Naira' },
+      { value: 'GBP', label: 'British Pound' },
+      { value: 'EUR', label: 'Euro' },
+      { value: 'SEK', label: 'Swedish Krona' }
+    ];
+    const currency = 'USD';
+    const initialFormValues = { amount: 100, description: '' };
+    const { amountFormatter, koboAmountToNaira, currencySymbol } = useAmountFormatter();
     const line_items = (props.previousBudget || { line_items: [] }).line_items
       .filter(({ description }) => description !== 'Unbudgeted')
       .map(({ amount, description }) => ({ amount: koboAmountToNaira(amount), description }));
@@ -94,6 +99,7 @@ export default {
         name: currentBudgetName(),
         start_date: currentBudgetStartDate(),
         end_date: currentBudgetEndDate(),
+        currency,
         line_items
       },
       form: { ...initialFormValues }
@@ -108,7 +114,8 @@ export default {
     const isDescriptionValid = computed(() => trimmedDescription.value.toLowerCase() !== 'unbudgeted');
     const canAddItem = computed(() => 
       hasAmount.value && hasDescription.value && descriptionUnique.value && isDescriptionValid.value);
-    const totalAmount = computed(() => amountFormatter(totalBudgetAmount(state.budget)));
+    const totalAmount = computed(() => amountFormatter(totalBudgetAmount(state.budget), state.budget.currency));
+    const lineItemCurrencySymbol = computed(() => currencySymbol(state.budget.currency));
 
     const addItem = () => {
       if (!canAddItem.value) return;
@@ -116,7 +123,6 @@ export default {
       state.form.description = trimmedDescription.value;
       state.budget.line_items.push(state.form);
       state.form = { ...initialFormValues };
-      refs.amountInput.reset();
     };
     const removeLineItem = (i) => state.budget.line_items.splice(i, 1);
     const createBudget = () => {
@@ -136,7 +142,9 @@ export default {
       canAddItem,
       removeLineItem,
       createBudget,
-      amountFormatter
+      amountFormatter,
+      lineItemCurrencySymbol,
+      currencies
     };
   }
 };

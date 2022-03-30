@@ -12,9 +12,16 @@ const monthName = (month) => [
   'November', 
   'December'][month];
 
-const moneyFormatter = new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN' });
+const moneyFormatter = (currency) => {
+  let locale = 'en-NG';
+  if (currency === 'SEK') locale = 'en-SE';
+  if (currency === 'USD') locale = 'en-US';
+  if (['GBP', 'EUR'].includes(currency)) locale = 'en-UK';
 
-const displayAmount = (amount) => moneyFormatter.format(amount);
+  return new Intl.NumberFormat(locale, { style: 'currency', currency });
+};
+
+const displayAmount = (amount, currency) => moneyFormatter(currency).format(amount);
 
 const totalBudgetAmount = (budget) => budget.line_items.reduce((sum, { amount }) => sum + +amount, 0);
 
