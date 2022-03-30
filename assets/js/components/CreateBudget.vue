@@ -1,8 +1,7 @@
 <template>
   <!-- eslint-disable -->
   <div class="px-4 py-3 rounded relative mb-3 bg-white p-4 flex flex-col justify-between leading-normal text-center">
-    <h2 class="text-5xl">Create a budget for {{ state.budget.name }}</h2>
-    <h4 class="text-2xl mt-3 mb-3">Add expense items:</h4>
+    <h2 class="text-5xl mb-3">Create a budget for {{ state.budget.name }}</h2>
     <form class="w-full max-w-sm">
       <div class="flex items-center border-b border-green-500 py-2">
         <input 
