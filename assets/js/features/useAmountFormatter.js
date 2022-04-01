@@ -8,7 +8,7 @@ export default function useAmountFormatter() {
     const str = displayAmount(1, currency).match(/\D+/g);
 
     return currency === 'SEK' ? str[1] : str[0];
-  }
+  };
 
   return { amountFormatter, formatKoboAmount, koboAmountToNaira, currencySymbol };
 }
