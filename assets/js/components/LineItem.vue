@@ -165,7 +165,7 @@ export default {
     const addExpense = () => {
       if (!canAddExpense.value) return;
 
-      const params = { ...state.form, amount: state.form.amount * 100 };
+      const params = { ...state.form, amount: Math.round(state.form.amount * 100) };
       params.description = trimmedDescription.value;
       state.busy = true;
 
