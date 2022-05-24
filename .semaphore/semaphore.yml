@@ -24,7 +24,6 @@ blocks:
       prologue:
         commands:
           - checkout
-          - kiex install 1.11
           - sem-version elixir 1.11
           - mix local.hex --force
           - mix local.rebar --force
@@ -45,7 +44,6 @@ blocks:
       prologue:
         commands:
           - checkout
-          - kiex install 1.11
           - sem-version elixir 1.11
           - mix local.hex --force
           - mix local.rebar --force
@@ -72,7 +70,6 @@ blocks:
       prologue:
         commands:
           - checkout
-          - kiex install 1.11
           - sem-version elixir 1.11
           - mix local.hex --force
           - mix local.rebar --force
